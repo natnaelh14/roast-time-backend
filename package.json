@@ -1,0 +1,22 @@
+{
+  "name": "roadt-time-backend",
+  "version": "1.0.0",
+  "description": "Node.js backend for RoastTime app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natnaelh14/roast-time-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/natnaelh14/roast-time-backend/issues"
+  },
+  "homepage": "https://github.com/natnaelh14/roast-time-backend#readme",
+  "volta": {
+    "node": "16.17.0"
+  }
+}
