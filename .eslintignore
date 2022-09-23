@@ -1,0 +1,5 @@
+node_modules
+# Below, so that it wont lint out build files.
+dist
+coverage
+.env
