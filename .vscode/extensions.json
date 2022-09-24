@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint", // Lint JS/TS while developing
+        "esbenp.prettier-vscode", // Format files on save and other options
+        "Orta.vscode-jest", // Auto run jest tests on save, etc
+        "mikestead.dotenv", // for .env files
+        "formulahendry.auto-rename-tag", // VS Code built-in linked tag editing doesn't work in jsx yet
+        "eamodio.gitlens", // View commit authors, file changes, and more
+    ]
+}
