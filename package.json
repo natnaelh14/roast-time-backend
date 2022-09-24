@@ -2,7 +2,7 @@
   "name": "roast-time-backend",
   "version": "1.0.0",
   "description": "Node.js backend for RoastTime app",
-  "main": "index.ts",
+  "main": "server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
     "test": "jest",
