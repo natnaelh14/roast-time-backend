@@ -3,4 +3,4 @@ node_modules
 dist
 coverage
 .env
-src/server.js
+src
