@@ -2,9 +2,11 @@
   "name": "roast-time-backend",
   "version": "1.0.0",
   "description": "Node.js backend for RoastTime app",
-  "main": "index.ts",
+  "main": "server.js",
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "server": "nodemon src/server.js",
+    "authServer": "nodemon src/authServer.js",
+    "dev": "concurrently \"npm run server\" \"npm run authServer\"",
     "test": "jest",
     "test:unit": "jest unit",
     "test:int": "jest int",
@@ -23,9 +25,6 @@
     "url": "https://github.com/natnaelh14/roast-time-backend/issues"
   },
   "homepage": "https://github.com/natnaelh14/roast-time-backend#readme",
-  "volta": {
-    "node": "16.17.0"
-  },
   "devDependencies": {
     "@types/jest": "^29.0.3",
     "@types/node": "^18.7.19",
@@ -51,6 +50,12 @@
     "typescript": "^4.8.3"
   },
   "dependencies": {
-    "dotenv": "^16.0.2"
+    "concurrently": "^7.4.0",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "volta": {
+    "node": "16.17.0"
   }
 }
