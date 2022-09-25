@@ -1,5 +1,5 @@
 const usersDB = {
-  users: require('../model/users.json'),
+  users: require('../models/users.json'),
   setUsers: function (data) {
     this.users = data;
   },
@@ -9,6 +9,7 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 
 const handleNewUser = async (req, res) => {
+  console.log('register', req.body);
   const { user, pwd } = req.body;
   if (!user || !pwd)
     return res
@@ -16,7 +17,8 @@ const handleNewUser = async (req, res) => {
       .json({ message: 'Username and password are required.' });
   // check for duplicate usernames in the db
   const duplicate = usersDB.users.find((person) => person.username === user);
-  if (duplicate) return res.sendStatus(409); //Conflict
+  if (duplicate)
+    return res.status(409).json({ message: 'Account already exists.' }); //Conflict
   try {
     //encrypt the password
     const hashedPwd = await bcrypt.hash(pwd, 10);
@@ -24,7 +26,7 @@ const handleNewUser = async (req, res) => {
     const newUser = { username: user, password: hashedPwd };
     usersDB.setUsers([...usersDB.users, newUser]);
     await fsPromises.writeFile(
-      path.join(__dirname, '..', 'model', 'users.json'),
+      path.join(__dirname, '..', 'models', 'users.json'),
       JSON.stringify(usersDB.users)
     );
     console.log(usersDB.users);

@@ -33,34 +33,26 @@ app.use(cookieParser());
 //serve static files
 app.use('/', express.static(path.join(__dirname, '/public')));
 
-const posts = [
-  {
-    username: 'Bob',
-    title: 'Post One',
-  },
-  {
-    username: 'Aaron',
-    title: 'Post Two',
-  },
-];
+// const authenticateToken = (req, res, next) => {
+//   const authHeader = req.headers['authorization'];
+//   //It will Bearer {{token}}
+//   const token = authHeader && authHeader.split(' ')[1]; //If there is not token, it will be undefined.
+//   if (token == null) return res.sendStatus(401);
+//   jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
+//     if (err) return res.sendStatus(403);
+//     req.user = user;
+//     next();
+//   });
+// };
 
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  //It will Bearer {{token}}
-  const token = authHeader && authHeader.split(' ')[1]; //If there is not token, it will be undefined.
-  if (token == null) return res.sendStatus(401);
-  jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-};
+// app.use(verifyJWT);
 
-app.use(verifyJWT);
-
-app.get('/posts', authenticateToken, (req, res) => {
-  res.json(posts.filter((post) => post.username === req.user.name));
-});
+// routes
+app.use('/register', require('./routes/register'));
+app.use('/login', require('./routes/login'));
+app.use('/refresh', require('./routes/refresh'));
+app.use('/logout', require('./routes/logout'));
+app.use('/post', require('./routes/post'));
 
 app.use(errorHandler);
 

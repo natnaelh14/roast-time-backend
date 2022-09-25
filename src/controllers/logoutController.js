@@ -1,5 +1,5 @@
 const usersDB = {
-  users: require('../model/users.json'),
+  users: require('../models/users.json'),
   setUsers: function (data) {
     this.users = data;
   },
