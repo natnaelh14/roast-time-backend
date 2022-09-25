@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const jwt = require('jsonwebtoken');
 const app = express();
 const PORT = process.env.PORT || 3500;
@@ -7,6 +8,8 @@ const credentials = require('./middleware/credentials');
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
 const cookieParser = require('cookie-parser');
+const verifyJWT = require('./middleware/verifyJWT');
+const errorHandler = require('./middleware/errorHandler');
 
 // custom middleware logger
 // app.use(logger);
@@ -55,7 +58,6 @@ const authenticateToken = (req, res, next) => {
 
 app.use(verifyJWT);
 
-
 app.get('/posts', authenticateToken, (req, res) => {
   res.json(posts.filter((post) => post.username === req.user.name));
 });
@@ -63,4 +65,3 @@ app.get('/posts', authenticateToken, (req, res) => {
 app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
