@@ -1,15 +1,15 @@
-const usersDB = {
-  users: require('../models/users.json'),
-  setUsers: function (data) {
-    this.users = data;
-  },
-};
+// const usersDB = {
+//   users: require('../models/users.json'),
+//   setUsers: function (data) {
+//     this.users = data;
+//   },
+// };
 const bcrypt = require('bcrypt');
-
+const client = require('../config/connection');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const fsPromises = require('fs').promises;
-const path = require('path');
+// const fsPromises = require('fs').promises;
+// const path = require('path');
 
 const handleLogin = async (req, res) => {
   const { user, pwd } = req.body;
@@ -17,42 +17,51 @@ const handleLogin = async (req, res) => {
     return res
       .status(400)
       .json({ message: 'Username and password are required.' });
-  const foundUser = usersDB.users.find((person) => person.username === user);
-  if (!foundUser) return res.sendStatus(401); //Unauthorized
-  // evaluate password
-  const match = await bcrypt.compare(pwd, foundUser.password);
-  if (match) {
-    // Create JWTs (The first thing you pass is the payload.)
-    const accessToken = jwt.sign(
-      { username: foundUser.username },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '30s' }
-    );
-    const refreshToken = jwt.sign(
-      { username: foundUser.username },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: '1d' }
-    );
-    // Saving refreshToken with current user
-    const otherUsers = usersDB.users.filter(
-      (person) => person.username !== foundUser.username
-    );
-    const currentUser = { ...foundUser, refreshToken };
-    usersDB.setUsers([...otherUsers, currentUser]);
-    await fsPromises.writeFile(
-      path.join(__dirname, '..', 'models', 'users.json'),
-      JSON.stringify(usersDB.users)
-    );
-    res.cookie('jwt', refreshToken, {
-      httpOnly: true, //httponly is not available to JavaScript.
-      sameSite: 'None',
-      secure: true,
-      maxAge: 24 * 60 * 60 * 1000, //You are setting it for one day.
-    });
-    res.json({ accessToken });
-  } else {
-    res.sendStatus(401);
-  }
+  client.query(
+    `Select * from users where username='${user}'`,
+    async (err, result) => {
+      if (!err) {
+        console.log(result.rows);
+        // Evaluate password
+        const match = await bcrypt.compare(pwd, result.rows[0].password);
+        if (match) {
+          // Create JWTs (The first thing you pass is the payload.)
+          const accessToken = jwt.sign(
+            { username: result.rows[0].username },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: '30m' }
+          );
+          // const refreshToken = jwt.sign(
+          //   { username: foundUser.username },
+          //   process.env.REFRESH_TOKEN_SECRET,
+          //   { expiresIn: '1d' }
+          // );
+          // // Saving refreshToken with current user
+          // const otherUsers = usersDB.users.filter(
+          //   (person) => person.username !== foundUser.username
+          // );
+          // const currentUser = { ...foundUser, refreshToken };
+          // usersDB.setUsers([...otherUsers, currentUser]);
+          // await fsPromises.writeFile(
+          //   path.join(__dirname, '..', 'models', 'users.json'),
+          //   JSON.stringify(usersDB.users)
+          // );
+          // res.cookie('jwt', refreshToken, {
+          //   httpOnly: true, //httponly is not available to JavaScript.
+          //   sameSite: 'None',
+          //   secure: true,
+          //   maxAge: 24 * 60 * 60 * 1000, //You are setting it for one day.
+          // });
+          res.json({ accessToken });
+        } else {
+          res.sendStatus(401);
+        }
+      } else {
+        res.sendStatus(401); //Unauthorized
+      }
+    }
+  );
+  client.end;
 };
 
 module.exports = { handleLogin };
