@@ -10,6 +10,7 @@ const corsOptions = require('./config/corsOptions');
 const cookieParser = require('cookie-parser');
 const verifyJWT = require('./middleware/verifyJWT');
 const errorHandler = require('./middleware/errorHandler');
+const client = require('./config/connection');
 
 // custom middleware logger
 // app.use(logger);
@@ -57,3 +58,5 @@ app.use('/post', require('./routes/post'));
 app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+client.connect();

@@ -1,36 +1,49 @@
-const usersDB = {
-  users: require('../models/users.json'),
-  setUsers: function (data) {
-    this.users = data;
-  },
-};
+// const usersDB = {
+//   users: require('../models/users.json'),
+//   setUsers: function (data) {
+//     this.users = data;
+//   },
+// };
 const fsPromises = require('fs').promises;
 const path = require('path');
 const bcrypt = require('bcrypt');
+const client = require('../config/connection');
 
 const handleNewUser = async (req, res) => {
   console.log('register', req.body);
   const { user, pwd } = req.body;
-  if (!user || !pwd)
-    return res
-      .status(400)
-      .json({ message: 'Username and password are required.' });
-  // check for duplicate usernames in the db
-  const duplicate = usersDB.users.find((person) => person.username === user);
-  if (duplicate)
-    return res.status(409).json({ message: 'Account already exists.' }); //Conflict
+  // if (!user || !pwd)
+  //   return res
+  //     .status(400)
+  //     .json({ message: 'Username and password are required.' });
+  // // check for duplicate usernames in the db
+  // const duplicate = usersDB.users.find((person) => person.username === user);
+  // if (duplicate)
+  //   return res.status(409).json({ message: 'Account already exists.' }); //Conflict
   try {
     //encrypt the password
     const hashedPwd = await bcrypt.hash(pwd, 10);
     //store the new user
-    const newUser = { username: user, password: hashedPwd };
-    usersDB.setUsers([...usersDB.users, newUser]);
-    await fsPromises.writeFile(
-      path.join(__dirname, '..', 'models', 'users.json'),
-      JSON.stringify(usersDB.users)
-    );
-    console.log(usersDB.users);
+    // const newUser = { username: user, password: hashedPwd };
+    // usersDB.setUsers([...usersDB.users, newUser]);
+    // await fsPromises.writeFile(
+    //   path.join(__dirname, '..', 'models', 'users.json'),
+    //   JSON.stringify(usersDB.users)
+    // );
+    // console.log(usersDB.users);
+    let insertQuery = `insert into users(username, password) 
+                       values('${user}', '${hashedPwd}')`;
+
+    client.query(insertQuery, (err, result) => {
+      if (!err) {
+        res.send('Insertion was successful');
+        console.log({ result });
+      } else {
+        console.log(err.message);
+      }
+    });
     res.status(201).json({ success: `New user ${user} created!` });
+    client.end;
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

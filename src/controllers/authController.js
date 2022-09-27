@@ -1,11 +1,11 @@
-const usersDB = {
-  users: require('../models/users.json'),
-  setUsers: function (data) {
-    this.users = data;
-  },
-};
+// const usersDB = {
+//   users: require('../models/users.json'),
+//   setUsers: function (data) {
+//     this.users = data;
+//   },
+// };
 const bcrypt = require('bcrypt');
-
+const client = require('../config/connection');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const fsPromises = require('fs').promises;
