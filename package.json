@@ -4,6 +4,7 @@
   "description": "Node.js backend for RoastTime app",
   "main": "server.js",
   "scripts": {
+    "start": "node src/server.js",
     "server": "nodemon src/server.js",
     "authServer": "nodemon src/authServer.js",
     "dev": "concurrently \"npm run server\" \"npm run authServer\"",
