@@ -12,18 +12,18 @@ require('dotenv').config();
 // const path = require('path');
 
 const handleLogin = async (req, res) => {
-  const { user, pwd } = req.body;
-  if (!user || !pwd)
+  const { username, password } = req.body;
+  if (!username || !password)
     return res
       .status(400)
       .json({ message: 'Username and password are required.' });
   client.query(
-    `Select * from users where username='${user}'`,
+    `Select * from users where username='${username}'`,
     async (err, result) => {
       if (!err) {
         console.log(result.rows);
         // Evaluate password
-        const match = await bcrypt.compare(pwd, result.rows[0].password);
+        const match = await bcrypt.compare(password, result.rows[0].password);
         if (match) {
           // Create JWTs (The first thing you pass is the payload.)
           const accessToken = jwt.sign(
