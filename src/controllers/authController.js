@@ -1,24 +1,16 @@
-// const usersDB = {
-//   users: require('../models/users.json'),
-//   setUsers: function (data) {
-//     this.users = data;
-//   },
-// };
 const bcrypt = require('bcrypt');
 const client = require('../config/connection');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-// const fsPromises = require('fs').promises;
-// const path = require('path');
 
 const handleLogin = async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password)
+  const { email, password } = req.body;
+  if (!email || !password)
     return res
       .status(400)
-      .json({ message: 'Username and password are required.' });
+      .json({ message: 'Email and password are required.' });
   client.query(
-    `Select * from users where username='${username}'`,
+    `Select * from users where email='${email}'`,
     async (err, result) => {
       if (!err) {
         console.log(result.rows);
@@ -29,12 +21,12 @@ const handleLogin = async (req, res) => {
           function (err, match) {
             if (err) {
               res.status(401).json({
-                message: 'Incorrect username or password. please try again',
+                message: 'Incorrect email or password. please try again',
               });
             } else {
               // Create JWTs (The first thing you pass is the payload.)
               const accessToken = jwt.sign(
-                { username: result?.rows[0]?.username },
+                {},
                 process.env.ACCESS_TOKEN_SECRET,
                 { expiresIn: '30m' }
               );
@@ -59,17 +51,10 @@ const handleLogin = async (req, res) => {
               //   secure: true,
               //   maxAge: 24 * 60 * 60 * 1000, //You are setting it for one day.
               // });
-              res.json({ accessToken });
+              res.status(201).json({ accessToken, email });
             }
           }
         );
-        // if (match) {
-        // } else {
-        //   res.status(401);
-        //   res.json({
-        //     message: 'Incorrect username or password. please try again',
-        //   });
-        // }
       } else {
         res.status(401);
         res.json({
