@@ -23,41 +23,58 @@ const handleLogin = async (req, res) => {
       if (!err) {
         console.log(result.rows);
         // Evaluate password
-        const match = await bcrypt.compare(password, result.rows[0].password);
-        if (match) {
-          // Create JWTs (The first thing you pass is the payload.)
-          const accessToken = jwt.sign(
-            { username: result.rows[0].username },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '30m' }
-          );
-          // const refreshToken = jwt.sign(
-          //   { username: foundUser.username },
-          //   process.env.REFRESH_TOKEN_SECRET,
-          //   { expiresIn: '1d' }
-          // );
-          // // Saving refreshToken with current user
-          // const otherUsers = usersDB.users.filter(
-          //   (person) => person.username !== foundUser.username
-          // );
-          // const currentUser = { ...foundUser, refreshToken };
-          // usersDB.setUsers([...otherUsers, currentUser]);
-          // await fsPromises.writeFile(
-          //   path.join(__dirname, '..', 'models', 'users.json'),
-          //   JSON.stringify(usersDB.users)
-          // );
-          // res.cookie('jwt', refreshToken, {
-          //   httpOnly: true, //httponly is not available to JavaScript.
-          //   sameSite: 'None',
-          //   secure: true,
-          //   maxAge: 24 * 60 * 60 * 1000, //You are setting it for one day.
-          // });
-          res.json({ accessToken });
-        } else {
-          res.sendStatus(401);
-        }
+        await bcrypt.compare(
+          password,
+          result?.rows[0]?.password,
+          function (err, match) {
+            if (err) {
+              res.status(401).json({
+                message: 'Incorrect username or password. please try again',
+              });
+            } else {
+              // Create JWTs (The first thing you pass is the payload.)
+              const accessToken = jwt.sign(
+                { username: result?.rows[0]?.username },
+                process.env.ACCESS_TOKEN_SECRET,
+                { expiresIn: '30m' }
+              );
+              // const refreshToken = jwt.sign(
+              //   { username: foundUser.username },
+              //   process.env.REFRESH_TOKEN_SECRET,
+              //   { expiresIn: '1d' }
+              // );
+              // // Saving refreshToken with current user
+              // const otherUsers = usersDB.users.filter(
+              //   (person) => person.username !== foundUser.username
+              // );
+              // const currentUser = { ...foundUser, refreshToken };
+              // usersDB.setUsers([...otherUsers, currentUser]);
+              // await fsPromises.writeFile(
+              //   path.join(__dirname, '..', 'models', 'users.json'),
+              //   JSON.stringify(usersDB.users)
+              // );
+              // res.cookie('jwt', refreshToken, {
+              //   httpOnly: true, //httponly is not available to JavaScript.
+              //   sameSite: 'None',
+              //   secure: true,
+              //   maxAge: 24 * 60 * 60 * 1000, //You are setting it for one day.
+              // });
+              res.json({ accessToken });
+            }
+          }
+        );
+        // if (match) {
+        // } else {
+        //   res.status(401);
+        //   res.json({
+        //     message: 'Incorrect username or password. please try again',
+        //   });
+        // }
       } else {
-        res.sendStatus(401); //Unauthorized
+        res.status(401);
+        res.json({
+          message: 'Incorrect username or password. please try again',
+        });
       }
     }
   );
