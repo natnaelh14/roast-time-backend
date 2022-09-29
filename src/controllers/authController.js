@@ -13,7 +13,6 @@ const handleLogin = async (req, res) => {
     `Select * from users where email='${email}'`,
     async (err, result) => {
       if (!err) {
-        console.log(result.rows);
         // Evaluate password
         await bcrypt.compare(
           password,
