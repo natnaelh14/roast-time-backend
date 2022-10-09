@@ -62,7 +62,7 @@ const handleLogin = async (req, res) => {
       }
     }
   );
-  client.end;
+  // client.end;
 };
 
 module.exports = { handleLogin };
