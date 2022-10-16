@@ -31,7 +31,7 @@ const handleNewUser = async (req, res) => {
         res.status(401).json({ message: 'unable to register user.' });
       }
     });
-    client.end;
+    // client.end;
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
