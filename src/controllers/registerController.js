@@ -4,9 +4,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const handleNewUser = async (req, res) => {
-  console.log('register', req.body);
-  const { email, password } = req.body;
-  if (!email || !password)
+  const { email, password, first_name, last_name, phone_number } = req.body;
+  if (!email || !password || !first_name || !last_name || !phone_number)
     return res
       .status(400)
       .json({ message: 'Email and password are required.' });
@@ -18,15 +17,17 @@ const handleNewUser = async (req, res) => {
     //encrypt the password
     const hashedPwd = await bcrypt.hash(password, 10);
     //store the new user
-    let insertQuery = `insert into users(email, password) 
-                       values('${email}', '${hashedPwd}')`;
+    let insertQuery = `insert into users(email, password, first_name, last_name, phone_number) 
+                       values('${email}', '${hashedPwd}', '${first_name}', '${last_name}', '${phone_number}')`;
 
     client.query(insertQuery, (err, result) => {
       if (!err) {
         const accessToken = jwt.sign({}, process.env.ACCESS_TOKEN_SECRET, {
           expiresIn: '30m',
         });
-        res.status(201).json({ accessToken, email });
+        res
+          .status(201)
+          .json({ accessToken, account: { first_name, last_name, email } });
       } else {
         res.status(401).json({ message: 'unable to register user.' });
       }
