@@ -50,7 +50,16 @@ const handleLogin = async (req, res) => {
               //   secure: true,
               //   maxAge: 24 * 60 * 60 * 1000, //You are setting it for one day.
               // });
-              res.status(201).json({ accessToken, email });
+              res.status(201).json({
+                accessToken,
+                account: {
+                  first_name: result.rows[0].first_name,
+                  last_name: result.rows[0].last_name,
+                  email,
+                  phone_number: result.rows[0].phone_number,
+                  account_type: result.rows[0].account_type,
+                },
+              });
             }
           }
         );
