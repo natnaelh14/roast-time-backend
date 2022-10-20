@@ -9,7 +9,7 @@ const handleLogin = async (req, res) => {
     return res
       .status(400)
       .json({ message: 'Email and password are required.' });
-  client.query(
+  await client.query(
     `SELECT * FROM users WHERE email='${email}'`,
     async (err, { rows }) => {
       if (!err) {
@@ -17,7 +17,7 @@ const handleLogin = async (req, res) => {
         await bcrypt.compare(
           password,
           rows[0]?.password,
-          function (err, match) {
+          async function (err, match) {
             if (err) {
               res.status(401).json({
                 message: 'Incorrect email or password. please try again',
@@ -50,16 +50,35 @@ const handleLogin = async (req, res) => {
               //   secure: true,
               //   maxAge: 24 * 60 * 60 * 1000, //You are setting it for one day.
               // });
-              res.status(201).json({
+              let userResponse = {
                 accessToken,
                 account: {
+                  id: rows[0].id,
                   first_name: rows[0].first_name,
                   last_name: rows[0].last_name,
-                  email,
+                  email: rows[0].email,
                   phone_number: rows[0].phone_number,
                   account_type: rows[0].account_type,
                 },
-              });
+              };
+              if (rows[0].account_type === 'restaurant') {
+                await client.query(
+                  'SELECT * FROM restaurants WHERE id = $1',
+                  [rows[0].restaurant_id],
+                  (error, results) => {
+                    if (error) {
+                      res.status(401).json({
+                        message: error.message,
+                      });
+                    }
+                    res
+                      .status(201)
+                      .json({ ...userResponse, restaurant: results.rows[0] });
+                  }
+                );
+              } else {
+                res.status(201).json(userResponse);
+              }
             }
           }
         );
