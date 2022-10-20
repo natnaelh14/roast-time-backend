@@ -49,6 +49,7 @@ app.use('/', express.static(path.join(__dirname, '/public')));
 // app.use(verifyJWT);
 
 // routes
+app.use('/restaurant/register', require('./routes/restaurant-register'));
 app.use('/register', require('./routes/register'));
 app.use('/login', require('./routes/login'));
 app.use('/refresh', require('./routes/refresh'));

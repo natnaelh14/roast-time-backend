@@ -10,13 +10,13 @@ const handleLogin = async (req, res) => {
       .status(400)
       .json({ message: 'Email and password are required.' });
   client.query(
-    `Select * from users where email='${email}'`,
-    async (err, result) => {
+    `SELECT * FROM users WHERE email='${email}'`,
+    async (err, { rows }) => {
       if (!err) {
         // Evaluate password
         await bcrypt.compare(
           password,
-          result?.rows[0]?.password,
+          rows[0]?.password,
           function (err, match) {
             if (err) {
               res.status(401).json({
@@ -53,11 +53,11 @@ const handleLogin = async (req, res) => {
               res.status(201).json({
                 accessToken,
                 account: {
-                  first_name: result.rows[0].first_name,
-                  last_name: result.rows[0].last_name,
+                  first_name: rows[0].first_name,
+                  last_name: rows[0].last_name,
                   email,
-                  phone_number: result.rows[0].phone_number,
-                  account_type: result.rows[0].account_type,
+                  phone_number: rows[0].phone_number,
+                  account_type: rows[0].account_type,
                 },
               });
             }
