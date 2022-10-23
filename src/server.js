@@ -50,6 +50,8 @@ app.use('/', express.static(path.join(__dirname, '/public')));
 
 // routes
 app.use('/restaurant/register', require('./routes/restaurant-register'));
+app.use('/restaurants', require('./routes/restaurants'));
+app.use('/restaurant/:id', require('./routes/restaurant-by-id'));
 app.use('/register', require('./routes/register'));
 app.use('/login', require('./routes/login'));
 app.use('/refresh', require('./routes/refresh'));
