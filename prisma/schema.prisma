@@ -19,24 +19,24 @@ model User {
   id          String       @id @default(uuid())
   createdAt   DateTime     @default(now())
   email       String       @unique
-  password    String       @unique
-  firstName   String       @unique
-  lastName    String       @unique
+  password    String
+  firstName   String
+  lastName    String
   phoneNumber String       @unique
   accountType ACCOUNT_TYPE
-  restaurants Restaurant[]
+  restaurant  Restaurant?
 }
 
 model Restaurant {
-  id          String   @id @default(uuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime
-  name        String   @db.VarChar(255)
-  address     String   @db.VarChar(255)
-  city        String   @db.VarChar(255)
-  state       String   @db.VarChar(255)
-  zipCode     String   @db.VarChar(255)
-  imageUrl    String?   @db.VarChar(255)
-  belongsToId String
-  belongsTo   User     @relation(fields: [belongsToId], references: [id])
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  name      String   @unique @db.VarChar(255)
+  address   String   @db.VarChar(255)
+  city      String   @db.VarChar(255)
+  state     String   @db.VarChar(255)
+  zipCode   String   @db.VarChar(255)
+  imageUrl  String?  @db.VarChar(255)
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
 }
