@@ -7,7 +7,7 @@
     "start": "node src/server.js",
     "server": "nodemon src/server.js",
     "authServer": "nodemon src/authServer.js",
-    "dev": "concurrently \"npm run server\" \"npm run authServer\"",
+    "dev": "ts-node src/index.ts",
     "test": "jest",
     "test:unit": "jest unit",
     "test:int": "jest int",
@@ -27,7 +27,9 @@
   },
   "homepage": "https://github.com/natnaelh14/roast-time-backend#readme",
   "devDependencies": {
+    "@types/express": "^4.17.14",
     "@types/jest": "^29.0.3",
+    "@types/morgan": "^1.9.3",
     "@types/node": "^18.7.19",
     "@typescript-eslint/eslint-plugin": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",
@@ -60,6 +62,7 @@
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
     "pg": "^8.8.0",
     "uuid": "^9.0.0"
   },
