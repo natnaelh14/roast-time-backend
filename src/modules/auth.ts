@@ -41,7 +41,7 @@ export const protectRoute = (
   }
 
   try {
-    const user = jwt.verify(token!, process.env.JWT_SECRET!);
+    const user = jwt.verify(token!, process.env.ACCESS_TOKEN_SECRET!);
     req.user = user;
     next();
   } catch (e) {
