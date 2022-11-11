@@ -1,14 +1,8 @@
 import prisma from '../config/db';
 import { comparePasswords, createJWT, hashPassword } from '../modules/auth';
 import { Request, Response } from 'express';
-import { validationResult } from 'express-validator';
 
 export const createNewUser = async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(400);
-    res.json({ errors: errors.array() });
-  }
   const user = await prisma.user.create({
     data: {
       email: req.body.email,
@@ -25,11 +19,6 @@ export const createNewUser = async (req: Request, res: Response) => {
 };
 
 export const signIn = async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(400);
-    res.json({ errors: errors.array() });
-  }
   const user = await prisma.user.findUnique({
     where: {
       email: req.body.email,

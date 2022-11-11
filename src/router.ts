@@ -7,6 +7,11 @@ import {
 } from './handlers/user';
 import { getAllRestaurants, getRestaurant } from './handlers/restaurant';
 import { body } from 'express-validator';
+import { handleInputErrors } from './modules/middleware';
+import {
+  validateRegisterInputs,
+  validateSignInInputs,
+} from './modules/validate-inputs';
 
 const router = Router();
 
@@ -17,33 +22,22 @@ router.get('/restaurant/:id', getRestaurant);
 router.post('/restaurant/register', () => {});
 router.post(
   '/register',
-  body('email').isEmail(),
-  body('password')
-    .isLength({ min: 10 })
-    .withMessage('Password must be at least 10 characters long')
-    .matches(/\d/)
-    .withMessage('Password must contain a number'),
-  body('firstName').not().isEmpty().trim().escape(),
-  body('lastName').not().isEmpty().trim().escape(),
-  body('phoneNumber').not().isEmpty().trim().escape(),
-  body('accountType').not().isEmpty().trim().escape(),
+  validateRegisterInputs,
+  handleInputErrors,
   createNewUser
 );
-router.post(
-  '/login',
-  body('email').isEmail(),
-  body('password')
-    .isLength({ min: 10 })
-    .withMessage('Password must be at least 10 characters long')
-    .matches(/\d/)
-    .withMessage('Password must contain a number'),
-  signIn
-);
+router.post('/login', validateSignInInputs, handleInputErrors, signIn);
 router.delete('/logout', () => {});
-router.get('/validate/email', body('email').isEmail(), validateEmail);
+router.get(
+  '/validate/email',
+  body('email').isEmail(),
+  handleInputErrors,
+  validateEmail
+);
 router.get(
   '/validate/phonenumber',
   body('phoneNumber').not().isEmpty().trim().escape(),
+  handleInputErrors,
   validatePhoneNumber
 );
 
