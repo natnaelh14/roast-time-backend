@@ -27,8 +27,11 @@
   },
   "homepage": "https://github.com/natnaelh14/roast-time-backend#readme",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.14",
     "@types/jest": "^29.0.3",
+    "@types/jsonwebtoken": "^8.5.9",
     "@types/morgan": "^1.9.3",
     "@types/node": "^18.7.19",
     "@typescript-eslint/eslint-plugin": "^5.38.0",
