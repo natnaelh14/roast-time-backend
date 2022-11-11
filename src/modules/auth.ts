@@ -53,7 +53,7 @@ export const protectRoute = (
 };
 
 export const comparePasswords = (password: string, hash: string) => {
-  return bcrypt.compare(password, hash);
+  return bcrypt.compare(password, hash) ?? false;
 };
 
 export const hashPassword = (password: string) => {
