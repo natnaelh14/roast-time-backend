@@ -1,5 +1,5 @@
-import prisma from 'src/config/db';
-import { comparePasswords, createJWT, hashPassword } from 'src/modules/auth';
+import prisma from '../config/db';
+import { comparePasswords, createJWT, hashPassword } from '../modules/auth';
 import { Request, Response } from 'express';
 
 export const createNewUser = async (req: Request, res: Response) => {
@@ -10,7 +10,7 @@ export const createNewUser = async (req: Request, res: Response) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       phoneNumber: req.body.phoneNumber,
-      accountType: req.body.accountType,
+      accountType: req.body.accountType.toUpperCase(),
     },
   });
   const token = createJWT(user);

@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import corsOptions from './config/corsOptions';
 import { protectRoute } from './modules/auth';
+import { createNewUser, signIn } from './handlers/user';
 
 dotenv.config();
 const app = express();
@@ -18,7 +19,9 @@ app.use(express.json());
 // Built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/', protectRoute, router);
+app.use('/api', protectRoute, router);
+app.post('/register', createNewUser);
+app.post('/login', signIn);
 
 app.listen(3009, () => {
   console.log('hello on http://localhost:3009');
