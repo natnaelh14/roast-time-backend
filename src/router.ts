@@ -5,6 +5,8 @@ import {
   validateEmail,
   validatePhoneNumber,
   handleNewRestaurantUser,
+  handleLogout,
+  handleUpdateUser,
 } from './handlers/user';
 import {
   handleGetAllRestaurants,
@@ -59,7 +61,8 @@ router.post(
   handleNewUser
 );
 router.post('/login', validateSignInInputs, handleInputErrors, handleSignIn);
-router.delete('/logout', () => {});
+router.put('/account/:accountId/update', protectRoute, handleUpdateUser);
+router.delete('/logout', protectRoute, handleLogout);
 router.get(
   '/validate/email',
   body('email').isEmail(),
