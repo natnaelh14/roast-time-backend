@@ -4,6 +4,7 @@ import router from './router';
 import morgan from 'morgan';
 import cors from 'cors';
 import corsOptions from './config/corsOptions';
+import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/', router);
+
+app.use(errorHandler);
 
 app.listen(3009, () => {
   console.log('hello on http://localhost:3009');
