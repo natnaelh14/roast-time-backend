@@ -84,6 +84,28 @@ export const handleNewRestaurantUser = async (req: Request, res: Response) => {
   res.json({ token, account: { ...newUser } });
 };
 
+export const handleUpdateUser = async (req: Request, res: Response) => {
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: req.params.accountId,
+    },
+    data: {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      phoneNumber: req.body.phoneNumber,
+    },
+  });
+  res.json({ restaurant: updatedUser });
+};
+
+export const handleLogout = (req: Request, res: Response) => {
+  const cookies = req.cookies;
+  if (!cookies?.jwt) return res.sendStatus(204); //No content
+
+  res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true });
+  res.status(204);
+};
+
 export const validateEmail = async (req: Request, res: Response) => {
   const user = await prisma.user.findUnique({
     where: {
