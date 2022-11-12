@@ -13,11 +13,22 @@ export const validateRegisterInputs = [
   body('accountType').isIn(['GUEST', 'RESTAURANT']).optional(),
 ];
 
+
 export const validateSignInInputs = [
   body('email').isEmail(),
   body('password')
-    .isLength({ min: 10 })
-    .withMessage('Password must be at least 10 characters long')
-    .matches(/\d/)
-    .withMessage('Password must contain a number'),
+  .isLength({ min: 10 })
+  .withMessage('Password must be at least 10 characters long')
+  .matches(/\d/)
+  .withMessage('Password must contain a number'),
+];
+
+export const validateRestaurantInputs = [
+  body('name').not().isEmpty(),
+  body('address').not().isEmpty(),
+  body('city').not().isEmpty(),
+  body('state').not().isEmpty().trim().escape(),
+  body('zipCode').not().isEmpty(),
+  // body('imageUrl').not().isEmpty(),
+  // body('userId').not().isEmpty().trim().escape(),
 ];

@@ -1,32 +1,64 @@
 import { Router } from 'express';
 import {
-  createNewUser,
-  signIn,
+  handleNewUser,
+  handleSignIn,
   validateEmail,
   validatePhoneNumber,
+  handleNewRestaurantUser,
 } from './handlers/user';
-import { getAllRestaurants, getRestaurant } from './handlers/restaurant';
+import {
+  handleGetAllRestaurants,
+  handleGetRestaurant,
+  handleNewRestaurant,
+  handleUpdateRestaurant,
+  handleDeleteRestaurant,
+} from './handlers/restaurant';
 import { body } from 'express-validator';
 import { handleInputErrors } from './modules/middleware';
 import {
   validateRegisterInputs,
   validateSignInInputs,
+  validateRestaurantInputs,
 } from './modules/validate-inputs';
+import { protectRoute } from './modules/auth';
 
 const router = Router();
 
-router.get('/restaurants', getAllRestaurants);
-router.get('/restaurant/:id', getRestaurant);
+// Restaurant
+router.post(
+  '/restaurant',
+  protectRoute,
+  validateRestaurantInputs,
+  handleNewRestaurant
+);
+router.get('/restaurants', handleGetAllRestaurants);
+router.get('/restaurant/:id', handleGetRestaurant);
+router.put(
+  '/restaurant/:accountId/update/:restaurantId',
+  protectRoute,
+  handleUpdateRestaurant
+);
+router.delete(
+  '/restaurant/:accountId/delete/:restaurantId',
+  protectRoute,
+  handleDeleteRestaurant
+);
 
 // User
-router.post('/restaurant/register', () => {});
+router.post(
+  '/restaurant/register',
+  validateRegisterInputs,
+  validateRestaurantInputs,
+  handleInputErrors,
+  handleNewRestaurantUser
+);
 router.post(
   '/register',
   validateRegisterInputs,
   handleInputErrors,
-  createNewUser
+  handleNewUser
 );
-router.post('/login', validateSignInInputs, handleInputErrors, signIn);
+router.post('/login', validateSignInInputs, handleInputErrors, handleSignIn);
 router.delete('/logout', () => {});
 router.get(
   '/validate/email',
