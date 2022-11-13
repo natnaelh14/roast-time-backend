@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import corsOptions from './config/corsOptions';
 import { errorHandler } from './middleware/errorHandler';
+const PORT = process.env.PORT || 3009;
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,4 @@ app.use('/', router);
 
 app.use(errorHandler);
 
-app.listen(3009, () => {
-  console.log('hello on http://localhost:3009');
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

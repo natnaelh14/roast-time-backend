@@ -4,7 +4,8 @@
   "description": "Node.js backend for RoastTime app",
   "main": "server.js",
   "scripts": {
-    "start": "node src/server.js",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
     "server": "nodemon src/server.js",
     "authServer": "nodemon src/authServer.js",
     "dev": "ts-node src/index.ts",
