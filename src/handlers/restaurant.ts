@@ -1,5 +1,9 @@
 import prisma from '../config/db';
 import { NextFunction, Request, Response } from 'express';
+import {
+  excludeFromArray,
+  excludeFromSingleObject,
+} from '../modules/prisma-utils';
 
 export const handleGetAllRestaurants = async (
   req: Request,
@@ -8,8 +12,9 @@ export const handleGetAllRestaurants = async (
 ) => {
   try {
     const restaurants = await prisma.restaurant.findMany();
+    const restaurantsWithoutUserId = excludeFromArray(restaurants, ['userId']);
     res.status(200);
-    res.json({ restaurants });
+    res.json(restaurantsWithoutUserId);
   } catch (error) {
     next(error);
   }
@@ -26,8 +31,12 @@ export const handleGetRestaurant = async (
         id: req.params.id,
       },
     });
+    const restaurantWithoutUserId = excludeFromSingleObject(restaurant, [
+      // @ts-expect-error
+      'userId',
+    ]);
     res.status(200);
-    res.json({ restaurant });
+    res.json(restaurantWithoutUserId);
   } catch (error) {
     next(error);
   }
@@ -56,7 +65,7 @@ export const handleNewRestaurant = async (
   res: Response,
   next: NextFunction
 ) => {
-  try {    
+  try {
     const user = await prisma.user.findUnique({
       where: {
         id: req.body.userId,
@@ -75,7 +84,7 @@ export const handleNewRestaurant = async (
       res.status(404);
       res.json({ message: 'User already has a restaurant linked.' });
     }
-  
+
     const restaurant = await prisma.restaurant.create({
       data: {
         name: req.body.name,
@@ -90,7 +99,7 @@ export const handleNewRestaurant = async (
     res.status(200);
     res.json({ restaurant });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
