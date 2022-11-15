@@ -18,9 +18,10 @@ export const handleNewUser = async (
         accountType: req.body.accountType.toUpperCase(),
       },
     });
+    const { password, ...userWithoutPassword } = user;
     const token = createJWT(user);
     res.status(200);
-    res.json({ token });
+    res.json({ token, account: userWithoutPassword });
   } catch (error) {
     next(error);
   }
@@ -51,10 +52,10 @@ export const handleSignIn = async (
       res.json({ message: 'Password is incorrect' });
       return;
     }
-    const { password, ...userInfo } = user;
+    const { password, ...userWithoutPassword } = user;
     const token = createJWT(user);
     res.status(200);
-    res.json({ token, account: { ...userInfo } });
+    res.json({ token, account: userWithoutPassword });
   } catch (error) {
     next(error);
   }
@@ -101,8 +102,14 @@ export const handleNewRestaurantUser = async (
         restaurant: true,
       },
     });
+    if (!newUser) {
+      res.status(401);
+      res.json({ message: 'Unable to complete registration' });
+      return;
+    }
+    const { password, ...userWithoutPassword } = newUser;
     res.status(200);
-    res.json({ token, account: { ...newUser } });
+    res.json({ token, account: userWithoutPassword });
   } catch (error) {
     next(error);
   }
