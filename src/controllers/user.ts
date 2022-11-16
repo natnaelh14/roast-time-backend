@@ -2,11 +2,11 @@ import prisma from '../config/db';
 import { comparePasswords, createJWT, hashPassword } from '../modules/auth';
 import { NextFunction, Request, Response } from 'express';
 
-export const handleNewUser = async (
+export async function handleNewUser(
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   try {
     const user = await prisma.user.create({
       data: {
@@ -25,13 +25,13 @@ export const handleNewUser = async (
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const handleSignIn = async (
+export async function handleSignIn(
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -42,15 +42,13 @@ export const handleSignIn = async (
       },
     });
     if (!user) {
-      res.status(401);
-      res.json({ message: 'Unable to find account with the given email' });
-      return;
+      return res
+        .status(401)
+        .json({ message: 'Unable to find account with the given email' });
     }
     const isValid = await comparePasswords(req.body.password, user?.password);
     if (!isValid) {
-      res.status(401);
-      res.json({ message: 'Password is incorrect' });
-      return;
+      return res.status(401).json({ message: 'Password is incorrect' });
     }
     const { password, ...userWithoutPassword } = user;
     const token = createJWT(user);
@@ -59,13 +57,13 @@ export const handleSignIn = async (
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const handleNewRestaurantUser = async (
+export async function handleNewRestaurantUser(
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   try {
     const user = await prisma.user.create({
       data: {
@@ -78,9 +76,9 @@ export const handleNewRestaurantUser = async (
       },
     });
     if (!user) {
-      res.status(401);
-      res.json({ message: 'Unable to create an account for the restaurant.' });
-      return;
+      return res
+        .status(401)
+        .json({ message: 'Unable to create an account for the restaurant.' });
     }
     await prisma.restaurant.create({
       data: {
@@ -103,9 +101,9 @@ export const handleNewRestaurantUser = async (
       },
     });
     if (!newUser) {
-      res.status(401);
-      res.json({ message: 'Unable to complete registration' });
-      return;
+      return res
+        .status(401)
+        .json({ message: 'Unable to complete registration' });
     }
     const { password, ...userWithoutPassword } = newUser;
     res.status(200);
@@ -113,13 +111,13 @@ export const handleNewRestaurantUser = async (
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const handleUpdateUser = async (
+export async function handleUpdateUser(
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   try {
     const updatedUser = await prisma.user.update({
       where: {
@@ -135,21 +133,21 @@ export const handleUpdateUser = async (
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const handleLogout = (req: Request, res: Response) => {
+export async function handleLogout(req: Request, res: Response) {
   const cookies = req.cookies;
   if (!cookies?.jwt) return res.sendStatus(204); //No content
 
   res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true });
   res.status(204);
-};
+}
 
-export const validateEmail = async (
+export async function validateEmail(
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -161,13 +159,13 @@ export const validateEmail = async (
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const validatePhoneNumber = async (
+export async function validatePhoneNumber(
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -179,4 +177,4 @@ export const validatePhoneNumber = async (
   } catch (error) {
     next(error);
   }
-};
+}
