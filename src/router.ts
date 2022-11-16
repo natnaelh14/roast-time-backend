@@ -7,14 +7,14 @@ import {
   handleNewRestaurantUser,
   handleLogout,
   handleUpdateUser,
-} from './handlers/user';
+} from './controllers/user';
 import {
   handleGetAllRestaurants,
   handleGetRestaurant,
   handleNewRestaurant,
   handleUpdateRestaurant,
   handleDeleteRestaurant,
-} from './handlers/restaurant';
+} from './controllers/restaurant';
 import { body } from 'express-validator';
 import { handleInputErrors } from './modules/middleware';
 import {

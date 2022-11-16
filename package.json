@@ -2,19 +2,17 @@
   "name": "roast-time-backend",
   "version": "1.0.0",
   "description": "Node.js backend for RoastTime app",
-  "main": "server.js",
+  "main": "index.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
-    "authServer": "nodemon src/authServer.js",
     "server": "nodemon src/index.ts",
     "test": "jest",
     "test:unit": "jest unit",
     "test:int": "jest int",
     "test:coverage": "jest --coverage",
-    "prepare": "husky install",
-    "lint": "eslint . --ext .tsx,.js",
-    "lint:fix": "eslint --fix ."
+    "lint": "eslint --ext .tsx,.js",
+    "lint:fix": "eslint --fix"
   },
   "repository": {
     "type": "git",
@@ -70,6 +68,12 @@
     "morgan": "^1.10.0",
     "pg": "^8.8.0",
     "uuid": "^9.0.0"
+  },
+  "lint-staged": {
+    "**/*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "volta": {
     "node": "16.17.0"

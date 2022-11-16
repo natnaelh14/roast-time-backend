@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Husky running ..."
+npm test --watchAll=false --passWithNoTests --bail
+npx lint-staged --verbose

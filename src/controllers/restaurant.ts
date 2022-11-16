@@ -5,11 +5,11 @@ import {
   excludeFromSingleObject,
 } from '../modules/prisma-utils';
 
-export const handleGetAllRestaurants = async (
+export async function handleGetAllRestaurants(
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   try {
     const restaurants = await prisma.restaurant.findMany();
     const restaurantsWithoutUserId = excludeFromArray(restaurants, ['userId']);
@@ -18,13 +18,13 @@ export const handleGetAllRestaurants = async (
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const handleGetRestaurant = async (
+export async function handleGetRestaurant(
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   try {
     const restaurant = await prisma.restaurant.findUnique({
       where: {
@@ -40,13 +40,13 @@ export const handleGetRestaurant = async (
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const handleRestaurantUpdate = async (
+export async function handleRestaurantUpdate(
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   try {
     const restaurant = await prisma.restaurant.findUnique({
       where: {
@@ -58,13 +58,13 @@ export const handleRestaurantUpdate = async (
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const handleNewRestaurant = async (
+export async function handleNewRestaurant(
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -75,14 +75,14 @@ export const handleNewRestaurant = async (
       },
     });
     if (user?.accountType === 'GUEST') {
-      res.status(404);
-      res.json({
+      return res.status(404).json({
         message: 'Guest accounts are not allowed to add a restaurant.',
       });
     }
     if (user?.restaurant) {
-      res.status(404);
-      res.json({ message: 'User already has a restaurant linked.' });
+      return res
+        .status(404)
+        .json({ message: 'User already has a restaurant linked.' });
     }
 
     const restaurant = await prisma.restaurant.create({
@@ -101,13 +101,13 @@ export const handleNewRestaurant = async (
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const handleUpdateRestaurant = async (
+export async function handleUpdateRestaurant(
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   try {
     const updatedRestaurant = await prisma.restaurant.update({
       where: {
@@ -128,13 +128,13 @@ export const handleUpdateRestaurant = async (
   } catch (error) {
     next(error);
   }
-};
+}
 
-export const handleDeleteRestaurant = async (
+export async function handleDeleteRestaurant(
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+) {
   try {
     await prisma.restaurant.delete({
       where: {
@@ -149,4 +149,4 @@ export const handleDeleteRestaurant = async (
   } catch (error) {
     next(error);
   }
-};
+}
