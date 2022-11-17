@@ -2,5 +2,5 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 echo "Husky running ..."
-npm test --watchAll=false --passWithNoTests --bail
+npm test --watchAll=false --bail
 npx lint-staged --verbose
