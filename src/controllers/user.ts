@@ -113,6 +113,33 @@ export async function handleNewRestaurantUser(
   }
 }
 
+export async function getUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    // @ts-ignore
+    const { id } = req?.user;
+    if (id !== req.params.accountId) {
+      return res
+        .status(403)
+        .json({ message: "user doesn't have access rights" });
+    }
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.params.accountId,
+      },
+      include: {
+        restaurant: true,
+      },
+    });
+    if (!user) {
+      return res.status(401).json({ message: 'Unable to find user' });
+    }
+    const { password, ...userData } = user;
+    res.json({ account: userData });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function handleUpdateUser(
   req: Request,
   res: Response,
@@ -133,14 +160,6 @@ export async function handleUpdateUser(
   } catch (error) {
     next(error);
   }
-}
-
-export async function handleLogout(req: Request, res: Response) {
-  const cookies = req.cookies;
-  if (!cookies?.jwt) return res.sendStatus(204); //No content
-
-  res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true });
-  res.status(204);
 }
 
 export async function validateEmail(
