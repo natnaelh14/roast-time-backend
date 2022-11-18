@@ -8,7 +8,10 @@ export function excludeFromSingleObject<Obj, Key extends keyof Obj>(
   return obj;
 }
 
-export function excludeFromArray(arr: Object[], keys: string[]): Object[] {
+export function excludeFromArrayOfObjects(
+  arr: Object[],
+  keys: string[]
+): Object[] {
   let newArr = [];
   for (let val of arr) {
     // @ts-expect-error

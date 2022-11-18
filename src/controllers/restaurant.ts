@@ -1,7 +1,7 @@
 import prisma from '../config/db';
 import { NextFunction, Request, Response } from 'express';
 import {
-  excludeFromArray,
+  excludeFromArrayOfObjects,
   excludeFromSingleObject,
 } from '../modules/prisma-utils';
 
@@ -12,7 +12,9 @@ export async function handleGetAllRestaurants(
 ) {
   try {
     const restaurants = await prisma.restaurant.findMany();
-    const restaurantsWithoutUserId = excludeFromArray(restaurants, ['userId']);
+    const restaurantsWithoutUserId = excludeFromArrayOfObjects(restaurants, [
+      'userId',
+    ]);
     res.status(200);
     res.json(restaurantsWithoutUserId);
   } catch (error) {
