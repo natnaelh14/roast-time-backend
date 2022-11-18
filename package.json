@@ -1,15 +1,14 @@
 {
   "name": "roast-time-backend",
   "version": "1.0.0",
-  "description": "Node.js backend for RoastTime app",
+  "description": "Node.js backend for roasttime app",
   "main": "index.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "server": "nodemon src/index.ts",
     "test": "jest",
-    "test:unit": "jest unit",
-    "test:int": "jest int",
+    "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "eslint --ext .tsx,.js",
     "lint:fix": "eslint --fix"
