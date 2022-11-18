@@ -146,6 +146,13 @@ export async function handleUpdateUser(
   next: NextFunction
 ) {
   try {
+    // @ts-ignore
+    const { id } = req?.user;
+    if (id !== req.params.accountId) {
+      return res
+        .status(403)
+        .json({ message: "user doesn't have access rights" });
+    }
     const updatedUser = await prisma.user.update({
       where: {
         id: req.params.accountId,
