@@ -11,7 +11,7 @@
     "plugin:eslint-comments/recommended",
     "plugin:jest/recommended",
     "plugin:promise/recommended",
-    "prettier"
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -34,6 +34,7 @@
     "import/prefer-default-export": "off",
     "import/no-default-export": "off",
     "arrow-body-style": "off",
+    "@typescript-eslint/ban-ts-ignore": "off",
     "import/order": [
       "error",
       {

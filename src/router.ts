@@ -1,4 +1,3 @@
-import { Router } from 'express';
 import {
   handleNewUser,
   handleSignIn,
@@ -15,7 +14,6 @@ import {
   handleUpdateRestaurant,
   handleDeleteRestaurant,
 } from './controllers/restaurant';
-import { body } from 'express-validator';
 import { handleInputErrors } from './modules/middleware';
 import {
   validateRegisterInputs,
@@ -23,6 +21,8 @@ import {
   validateRestaurantInputs,
 } from './modules/validate-inputs';
 import { protectRoute } from './modules/auth';
+import { body } from 'express-validator';
+import { Router } from 'express';
 
 const router = Router();
 
@@ -31,19 +31,19 @@ router.post(
   '/restaurant',
   protectRoute,
   validateRestaurantInputs,
-  handleNewRestaurant
+  handleNewRestaurant,
 );
 router.get('/restaurants', handleGetAllRestaurants);
 router.get('/restaurant/:id', handleGetRestaurant);
 router.put(
   '/restaurant/:accountId/update/:restaurantId',
   protectRoute,
-  handleUpdateRestaurant
+  handleUpdateRestaurant,
 );
 router.delete(
   '/restaurant/:accountId/delete/:restaurantId',
   protectRoute,
-  handleDeleteRestaurant
+  handleDeleteRestaurant,
 );
 
 // User
@@ -52,13 +52,13 @@ router.post(
   validateRegisterInputs,
   validateRestaurantInputs,
   handleInputErrors,
-  handleNewRestaurantUser
+  handleNewRestaurantUser,
 );
 router.post(
   '/register',
   validateRegisterInputs,
   handleInputErrors,
-  handleNewUser
+  handleNewUser,
 );
 router.post('/login', validateSignInInputs, handleInputErrors, handleSignIn);
 router.get('/account/:accountId', protectRoute, getUser);
@@ -67,13 +67,13 @@ router.get(
   '/validate/email',
   body('email').isEmail(),
   handleInputErrors,
-  validateEmail
+  validateEmail,
 );
 router.get(
   '/validate/phonenumber',
   body('phoneNumber').not().isEmpty().trim().escape(),
   handleInputErrors,
-  validatePhoneNumber
+  validatePhoneNumber,
 );
 
 export default router;
