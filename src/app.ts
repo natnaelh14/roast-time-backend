@@ -1,9 +1,9 @@
-import express from 'express';
 import router from './router';
-import morgan from 'morgan';
-import cors from 'cors';
 import { corsOptions } from './config/corsOptions';
 import { errorHandler } from './middleware/errorHandler';
+import express from 'express';
+import morgan from 'morgan';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -14,10 +14,10 @@ app.use(morgan('dev'));
 // Cross Origin Resource Sharing
 app.use(cors(corsOptions));
 
-//It lets the app use json form the body of the request.
+// It lets the app use json form the body of the request.
 app.use(express.json());
 
-//middleware for cookies
+// middleware for cookies
 app.use(cookieParser());
 
 // Built-in middleware to handle urlencoded form data

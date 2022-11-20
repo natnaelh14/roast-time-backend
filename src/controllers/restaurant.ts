@@ -1,14 +1,14 @@
 import prisma from '../config/db';
-import { NextFunction, Request, Response } from 'express';
 import {
   excludeFromArrayOfObjects,
   excludeFromSingleObject,
 } from '../modules/prisma-utils';
+import { NextFunction, Request, Response } from 'express';
 
 export async function handleGetAllRestaurants(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const restaurants = await prisma.restaurant.findMany();
@@ -25,7 +25,7 @@ export async function handleGetAllRestaurants(
 export async function handleGetRestaurant(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const restaurant = await prisma.restaurant.findUnique({
@@ -34,6 +34,7 @@ export async function handleGetRestaurant(
       },
     });
     const restaurantWithoutUserId = excludeFromSingleObject(restaurant, [
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       'userId',
     ]);
@@ -47,7 +48,7 @@ export async function handleGetRestaurant(
 export async function handleRestaurantUpdate(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const restaurant = await prisma.restaurant.findUnique({
@@ -65,7 +66,7 @@ export async function handleRestaurantUpdate(
 export async function handleNewRestaurant(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const user = await prisma.user.findUnique({
@@ -98,17 +99,16 @@ export async function handleNewRestaurant(
         userId: req.body.userId,
       },
     });
-    res.status(200);
-    res.json({ restaurant });
+    return res.status(200).json({ restaurant });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 
 export async function handleUpdateRestaurant(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const updatedRestaurant = await prisma.restaurant.update({
@@ -135,7 +135,7 @@ export async function handleUpdateRestaurant(
 export async function handleDeleteRestaurant(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     await prisma.restaurant.delete({

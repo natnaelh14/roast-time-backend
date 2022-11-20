@@ -1,5 +1,5 @@
-import request from 'supertest';
 import app from '../app';
+import request from 'supertest';
 
 describe('GET /retaurants', () => {
   test('should return a 200 success', async () => {

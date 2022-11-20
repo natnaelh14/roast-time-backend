@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express';
 export async function handleNewUser(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const user = await prisma.user.create({
@@ -30,7 +30,7 @@ export async function handleNewUser(
 export async function handleSignIn(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const user = await prisma.user.findUnique({
@@ -52,17 +52,16 @@ export async function handleSignIn(
     }
     const { password, ...userWithoutPassword } = user;
     const token = createJWT(user);
-    res.status(200);
-    res.json({ token, account: userWithoutPassword });
+    return res.status(200).json({ token, account: userWithoutPassword });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 
 export async function handleNewRestaurantUser(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const user = await prisma.user.create({
@@ -92,7 +91,7 @@ export async function handleNewRestaurantUser(
       },
     });
     const token = createJWT(user);
-    let newUser = await prisma.user.findUnique({
+    const newUser = await prisma.user.findUnique({
       where: {
         id: user.id,
       },
@@ -106,17 +105,17 @@ export async function handleNewRestaurantUser(
         .json({ message: 'Unable to complete registration' });
     }
     const { password, ...userWithoutPassword } = newUser;
-    res.status(200);
-    res.json({ token, account: userWithoutPassword });
+    return res.status(200).json({ token, account: userWithoutPassword });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 
 export async function getUser(req: Request, res: Response, next: NextFunction) {
   try {
-    // @ts-ignore
-    const { id } = req?.user;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore:next-line
+    const { id } = req.user;
     if (id !== req.params.accountId) {
       return res
         .status(403)
@@ -134,20 +133,21 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
       return res.status(401).json({ message: 'Unable to find user' });
     }
     const { password, ...userData } = user;
-    res.json({ account: userData });
+    return res.status(200).json({ account: userData });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 
 export async function handleUpdateUser(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
-    // @ts-ignore
-    const { id } = req?.user;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore:next-line
+    const { id } = req.user;
     if (id !== req.params.accountId) {
       return res
         .status(403)
@@ -163,16 +163,16 @@ export async function handleUpdateUser(
         phoneNumber: req.body.phoneNumber,
       },
     });
-    res.json({ restaurant: updatedUser });
+    return res.status(200).json({ restaurant: updatedUser });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 
 export async function validateEmail(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const user = await prisma.user.findUnique({
@@ -181,7 +181,7 @@ export async function validateEmail(
       },
     });
     res.status(200);
-    res.json(user ? false : true);
+    res.json(!user);
   } catch (error) {
     next(error);
   }
@@ -190,7 +190,7 @@ export async function validateEmail(
 export async function validatePhoneNumber(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const user = await prisma.user.findUnique({
@@ -199,7 +199,7 @@ export async function validatePhoneNumber(
       },
     });
     res.status(200);
-    res.json(user ? false : true);
+    res.json(!user);
   } catch (error) {
     next(error);
   }

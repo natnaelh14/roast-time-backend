@@ -15,17 +15,18 @@ export const createJWT = (user: UserProps) => {
       email: user.email,
       accountType: user.accountType,
     },
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     process.env.ACCESS_TOKEN_SECRET!,
     {
       expiresIn: '30m',
-    }
+    },
   );
 };
 
 export const protectRoute = (
   req: IGetUserAuthInfoRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const bearer = req.headers.authorization;
 
@@ -41,14 +42,16 @@ export const protectRoute = (
   }
 
   try {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const user = jwt.verify(token!, process.env.ACCESS_TOKEN_SECRET!);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore:next-line
     req.user = user;
     next();
   } catch (e) {
     console.error(e);
     res.status(401);
     res.json({ message: 'not valid token' });
-    return;
   }
 };
 

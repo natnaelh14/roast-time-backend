@@ -10,8 +10,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "lint": "eslint --ext .tsx,.js",
-    "lint:fix": "eslint --fix"
+    "style:all": "tsc && npm run style:eslint && npm run style:prettier",
+    "style:eslint": "eslint --fix '**/*.{js,ts}'",
+    "style:prettier": "prettier --write '**/*.{js,ts}'"
   },
   "repository": {
     "type": "git",
