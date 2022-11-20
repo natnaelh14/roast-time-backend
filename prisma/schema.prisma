@@ -1,10 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
+// The generator is what you code is generated to. "prisma-client-js" is the default formatter.
 generator client {
   provider = "prisma-client-js"
 }
 
+// You can only have one datasource at a time
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -18,6 +17,7 @@ enum ACCOUNT_TYPE {
 model User {
   id          String       @id @default(uuid())
   createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   email       String       @unique
   password    String
   firstName   String
