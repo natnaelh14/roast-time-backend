@@ -17,7 +17,7 @@ enum ACCOUNT_TYPE {
 model User {
   id          String       @id @default(uuid())
   createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  updatedAt   DateTime?    @updatedAt
   email       String       @unique
   password    String
   firstName   String
@@ -28,17 +28,15 @@ model User {
 }
 
 model Restaurant {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String   @unique @db.VarChar(255)
-  address   String   @db.VarChar(255)
-  city      String   @db.VarChar(255)
-  state     String   @db.VarChar(255)
-  zipCode   String   @db.VarChar(255)
-  imageUrl  String?  @db.VarChar(255)
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id])
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  name      String    @unique @db.VarChar(255)
+  category  String    @db.VarChar(255)
+  address   String    @db.VarChar(255)
+  imageUrl  String    @db.VarChar(255)
+  userId    String    @unique
+  user      User      @relation(fields: [userId], references: [id])
 
   @@unique([id, userId])
 }

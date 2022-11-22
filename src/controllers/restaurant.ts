@@ -92,9 +92,7 @@ export async function handleNewRestaurant(
       data: {
         name: req.body.name,
         address: req.body.address,
-        city: req.body.city,
-        state: req.body.state,
-        zipCode: req.body.zipCode,
+        category: req.body.category,
         imageUrl: req.body.imageUrl,
         userId: req.body.userId,
       },
@@ -121,9 +119,8 @@ export async function handleUpdateRestaurant(
       data: {
         name: req.body.name,
         address: req.body.address,
-        city: req.body.city,
-        state: req.body.state,
-        zipCode: req.body.zipCode,
+        category: req.body.category,
+        imageUrl: req.body.imageUrl,
       },
     });
     res.json({ restaurant: updatedRestaurant });
