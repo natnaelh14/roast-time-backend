@@ -5,4 +5,7 @@ const PORT = process.env.PORT || 3009;
 
 dotenv.config();
 
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+const server = app.listen(PORT, () =>
+  console.log(`🚀 Server running on port ${PORT}`),
+);
+server.setTimeout(30000);

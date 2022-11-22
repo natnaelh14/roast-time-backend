@@ -82,10 +82,8 @@ export async function handleNewRestaurantUser(
     await prisma.restaurant.create({
       data: {
         name: req.body.name,
+        category: req.body.category,
         address: req.body.address,
-        city: req.body.city,
-        state: req.body.state,
-        zipCode: req.body.zipCode,
         imageUrl: req.body.imageUrl,
         userId: user.id,
       },
