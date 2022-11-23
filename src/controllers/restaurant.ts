@@ -124,9 +124,12 @@ export async function updateRestaurant(
         imageUrl: req.body.imageUrl,
       },
     });
-    res.json({ restaurant: updatedRestaurant });
+    if (!updatedRestaurant) {
+      return res.status(404).json({ message: 'Unable to update restaurant' });
+    }
+    return res.json({ restaurant: updatedRestaurant });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 
@@ -136,17 +139,21 @@ export async function deleteRestaurant(
   next: NextFunction,
 ) {
   try {
-    await prisma.restaurant.delete({
-      where: {
-        id_userId: {
-          id: req.params.restaurantId,
-          userId: req.params.accountId,
+    await prisma.restaurant
+      .delete({
+        where: {
+          id_userId: {
+            id: req.params.restaurantId,
+            userId: req.params.accountId,
+          },
         },
-      },
-    });
+      })
+      .catch(() => {
+        return res.status(404).json({ message: 'Unable to update restaurant' });
+      });
 
-    res.json({ message: 'Restaurant has been removed.' });
+    return res.json({ message: 'Restaurant has been removed.' });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
