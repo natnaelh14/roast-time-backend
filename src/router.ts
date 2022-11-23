@@ -4,15 +4,15 @@ import {
   validateEmail,
   validatePhoneNumber,
   handleNewRestaurantUser,
-  handleUpdateUser,
+  updateUser,
   getUser,
 } from './controllers/user';
 import {
-  handleGetAllRestaurants,
-  handleGetRestaurant,
+  getRestaurantById,
   handleNewRestaurant,
-  handleUpdateRestaurant,
-  handleDeleteRestaurant,
+  updateRestaurant,
+  deleteRestaurant,
+  getRestaurants,
 } from './controllers/restaurant';
 import { handleInputErrors } from './modules/middleware';
 import {
@@ -33,17 +33,17 @@ router.post(
   validateRestaurantInputs,
   handleNewRestaurant,
 );
-router.get('/restaurants', handleGetAllRestaurants);
-router.get('/restaurant/:id', handleGetRestaurant);
+router.get('/search/restaurant/:id', getRestaurantById);
+router.get('/restaurants/:name*?', getRestaurants);
 router.put(
   '/restaurant/:accountId/update/:restaurantId',
   protectRoute,
-  handleUpdateRestaurant,
+  updateRestaurant,
 );
 router.delete(
   '/restaurant/:accountId/delete/:restaurantId',
   protectRoute,
-  handleDeleteRestaurant,
+  deleteRestaurant,
 );
 
 // User
@@ -62,7 +62,7 @@ router.post(
 );
 router.post('/login', validateSignInInputs, handleInputErrors, handleSignIn);
 router.get('/account/:accountId', protectRoute, getUser);
-router.put('/account/:accountId/update', protectRoute, handleUpdateUser);
+router.put('/account/:accountId/update', protectRoute, updateUser);
 router.get(
   '/validate/email',
   body('email').isEmail(),

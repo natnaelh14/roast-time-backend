@@ -137,7 +137,7 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function handleUpdateUser(
+export async function updateUser(
   req: Request,
   res: Response,
   next: NextFunction,

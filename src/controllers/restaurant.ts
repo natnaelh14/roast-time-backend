@@ -5,24 +5,42 @@ import {
 } from '../modules/prisma-utils';
 import { NextFunction, Request, Response } from 'express';
 
-export async function handleGetAllRestaurants(
+export async function getRestaurants(
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
   try {
-    const restaurants = await prisma.restaurant.findMany();
+    let restaurants;
+    if (req.params.name) {
+      restaurants = await prisma.restaurant.findMany({
+        where: {
+          name: {
+            contains: req.params.name,
+            mode: 'insensitive',
+          },
+        },
+      });
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      restaurants = await prisma.restaurant.findMany();
+    }
+    if (!restaurants.length) {
+      return res
+        .status(401)
+        .json({ message: 'Unable to find restaurant, lose' });
+    }
     const restaurantsWithoutUserId = excludeFromArrayOfObjects(restaurants, [
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       'userId',
     ]);
-    res.status(200);
-    res.json(restaurantsWithoutUserId);
+    return res.status(200).json(restaurantsWithoutUserId);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 
-export async function handleGetRestaurant(
+export async function getRestaurantById(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -33,33 +51,16 @@ export async function handleGetRestaurant(
         id: req.params.id,
       },
     });
+    if (!restaurant) {
+      return res.status(401).json({ message: 'Unable to find restaurant' });
+    }
     const restaurantWithoutUserId = excludeFromSingleObject(restaurant, [
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       'userId',
     ]);
-    res.status(200);
-    res.json(restaurantWithoutUserId);
+    return res.status(200).json(restaurantWithoutUserId);
   } catch (error) {
-    next(error);
-  }
-}
-
-export async function handleRestaurantUpdate(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  try {
-    const restaurant = await prisma.restaurant.findUnique({
-      where: {
-        id: req.params.id,
-      },
-    });
-    res.status(200);
-    res.json({ restaurant });
-  } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 
@@ -103,7 +104,7 @@ export async function handleNewRestaurant(
   }
 }
 
-export async function handleUpdateRestaurant(
+export async function updateRestaurant(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -129,7 +130,7 @@ export async function handleUpdateRestaurant(
   }
 }
 
-export async function handleDeleteRestaurant(
+export async function deleteRestaurant(
   req: Request,
   res: Response,
   next: NextFunction,
