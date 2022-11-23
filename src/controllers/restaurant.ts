@@ -26,9 +26,7 @@ export async function getRestaurants(
       restaurants = await prisma.restaurant.findMany();
     }
     if (!restaurants.length) {
-      return res
-        .status(401)
-        .json({ message: 'Unable to find restaurant, lose' });
+      return res.status(401).json({ message: 'Unable to find restaurants' });
     }
     const restaurantsWithoutUserId = excludeFromArrayOfObjects(restaurants, [
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
