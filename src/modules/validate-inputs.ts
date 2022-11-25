@@ -25,6 +25,8 @@ export const validateSignInInputs = [
 export const validateRestaurantInputs = [
   body('name').not().isEmpty(),
   body('address').not().isEmpty(),
+  body('latitude').not().isEmpty(),
+  body('longitude').not().isEmpty(),
+  body('category').not().isEmpty(),
   body('imageUrl').not().isEmpty(),
-  // body('userId').not().isEmpty().trim().escape(),
 ];
