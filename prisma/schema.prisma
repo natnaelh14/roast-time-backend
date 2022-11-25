@@ -1,6 +1,7 @@
 // The generator is what you code is generated to. "prisma-client-js" is the default formatter.
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 // You can only have one datasource at a time
@@ -32,8 +33,10 @@ model Restaurant {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   name      String    @unique @db.VarChar(255)
-  category  String    @db.VarChar(255)
   address   String    @db.VarChar(255)
+  latitude  Float
+  longitude Float
+  category  String    @db.VarChar(255)
   imageUrl  String    @db.VarChar(255)
   userId    String    @unique
   user      User      @relation(fields: [userId], references: [id])

@@ -91,6 +91,8 @@ export async function handleNewRestaurant(
       data: {
         name: req.body.name,
         address: req.body.address,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
         category: req.body.category,
         imageUrl: req.body.imageUrl,
         userId: req.body.userId,
@@ -118,6 +120,8 @@ export async function updateRestaurant(
       data: {
         name: req.body.name,
         address: req.body.address,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
         category: req.body.category,
         imageUrl: req.body.imageUrl,
       },

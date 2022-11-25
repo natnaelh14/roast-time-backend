@@ -8,4 +8,4 @@ dotenv.config();
 const server = app.listen(PORT, () =>
   console.log(`🚀 Server running on port ${PORT}`),
 );
-server.setTimeout(30000);
+server.setTimeout(120000);

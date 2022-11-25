@@ -82,8 +82,10 @@ export async function handleNewRestaurantUser(
     await prisma.restaurant.create({
       data: {
         name: req.body.name,
-        category: req.body.category,
         address: req.body.address,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
+        category: req.body.category,
         imageUrl: req.body.imageUrl,
         userId: user.id,
       },
@@ -178,10 +180,9 @@ export async function validateEmail(
         email: req.body.email,
       },
     });
-    res.status(200);
-    res.json(!user);
+    return res.status(200).json({ isValid: !user });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 
@@ -196,9 +197,8 @@ export async function validatePhoneNumber(
         phoneNumber: req.body.phoneNumber,
       },
     });
-    res.status(200);
-    res.json(!user);
+    return res.status(200).json({ isValid: !user });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
