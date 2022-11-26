@@ -11,9 +11,6 @@ describe('Validate user', () => {
       .expect(200);
     expect(response.body.isValid).toBe(true);
   });
-});
-
-describe('validate phone number', () => {
   // eslint-disable-next-line jest/expect-expect
   test('validate phoneNumber and return a boolean', async () => {
     const response = await request(app)
@@ -22,5 +19,16 @@ describe('validate phone number', () => {
       .set('Accept', 'application/json')
       .expect(200);
     expect(response.body.isValid).toBe(true);
+  });
+
+  test('should catch incorrect login credentials.', async () => {
+    const response = await request(app)
+      .post('/login')
+      .send({ email: 'test@test.com', password: '00000000000' })
+      .set('Accept', 'application/json')
+      .expect(401);
+    expect(response.body).toStrictEqual({
+      message: 'Unable to find account with the given email',
+    });
   });
 });

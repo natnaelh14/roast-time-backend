@@ -18,12 +18,14 @@ export async function handleNewUser(
         accountType: req.body.accountType.toUpperCase(),
       },
     });
+    if (!user) {
+      return res.status(401).json({ message: 'Unable to create an account.' });
+    }
     const { password, ...userWithoutPassword } = user;
     const token = createJWT(user);
-    res.status(200);
-    res.json({ token, account: userWithoutPassword });
+    return res.status(200).json({ token, account: userWithoutPassword });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 

@@ -23,7 +23,7 @@ app.use(cookieParser());
 // Built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/', router);
+app.use('/v1', router);
 
 app.use(errorHandler);
 
