@@ -5,7 +5,7 @@ describe('Validate user', () => {
   // eslint-disable-next-line jest/expect-expect
   test('validate email and return a boolean', async () => {
     const response = await request(app)
-      .get('/validate/email')
+      .get('/v1/validate/email')
       .send({ email: 'test@test.com' })
       .set('Accept', 'application/json')
       .expect(200);
@@ -14,7 +14,7 @@ describe('Validate user', () => {
   // eslint-disable-next-line jest/expect-expect
   test('validate phoneNumber and return a boolean', async () => {
     const response = await request(app)
-      .get('/validate/phonenumber')
+      .get('/v1/validate/phonenumber')
       .send({ phoneNumber: '0000000000' })
       .set('Accept', 'application/json')
       .expect(200);
@@ -23,7 +23,7 @@ describe('Validate user', () => {
 
   test('should catch incorrect login credentials.', async () => {
     const response = await request(app)
-      .post('/login')
+      .post('/v1/login')
       .send({ email: 'test@test.com', password: '00000000000' })
       .set('Accept', 'application/json')
       .expect(401);
