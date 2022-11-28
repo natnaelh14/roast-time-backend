@@ -5,8 +5,12 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 
 const app = express();
+
+// Helmet helps you secure your Express apps by setting various HTTP headers.
+app.use(helmet());
 
 // Morgan is a middleware that logs requests
 app.use(morgan('dev'));
