@@ -28,5 +28,4 @@ export const validateRestaurantInputs = [
   body('latitude').not().isEmpty(),
   body('longitude').not().isEmpty(),
   body('category').not().isEmpty(),
-  body('imageUrl').not().isEmpty(),
 ];

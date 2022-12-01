@@ -37,7 +37,7 @@ model Restaurant {
   latitude  Float
   longitude Float
   category  String    @db.VarChar(255)
-  imageUrl  String    @db.VarChar(255)
+  imageData Json
   userId    String    @unique
   user      User      @relation(fields: [userId], references: [id])
 
