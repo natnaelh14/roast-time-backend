@@ -4,6 +4,7 @@ import {
   excludeFromSingleObject,
 } from '../modules/prisma-utils';
 import { NextFunction, Request, Response } from 'express';
+import { Prisma } from '@prisma/client';
 
 export async function getRestaurants(
   req: Request,
@@ -94,7 +95,7 @@ export async function handleNewRestaurant(
         latitude: req.body.latitude,
         longitude: req.body.longitude,
         category: req.body.category,
-        imageUrl: req.body.imageUrl,
+        imageData: req.body.imageData as Prisma.JsonArray,
         userId: req.body.userId,
       },
     });
@@ -123,7 +124,7 @@ export async function updateRestaurant(
         latitude: req.body.latitude,
         longitude: req.body.longitude,
         category: req.body.category,
-        imageUrl: req.body.imageUrl,
+        imageData: req.body.imageData as Prisma.JsonArray,
       },
     });
     if (!updatedRestaurant) {

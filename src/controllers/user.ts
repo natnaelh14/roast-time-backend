@@ -1,6 +1,7 @@
 import prisma from '../config/db';
 import { comparePasswords, createJWT, hashPassword } from '../modules/auth';
 import { NextFunction, Request, Response } from 'express';
+import { Prisma } from '@prisma/client';
 
 export async function handleNewUser(
   req: Request,
@@ -88,7 +89,7 @@ export async function handleNewRestaurantUser(
         latitude: req.body.latitude,
         longitude: req.body.longitude,
         category: req.body.category,
-        imageUrl: req.body.imageUrl,
+        imageData: req.body.imageData as Prisma.JsonArray,
         userId: user.id,
       },
     });
