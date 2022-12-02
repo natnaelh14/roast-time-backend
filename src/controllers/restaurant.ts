@@ -12,9 +12,24 @@ export async function getRestaurants(
   next: NextFunction,
 ) {
   try {
+    const { pageCount, name } = req.params;
+    const skipCount = (+pageCount - 1) * 10;
     let restaurants;
-    if (req.params.name) {
+    let totalCount;
+
+    if (name) {
       restaurants = await prisma.restaurant.findMany({
+        skip: skipCount,
+        take: 10,
+        where: {
+          name: {
+            contains: req.params.name,
+            mode: 'insensitive',
+          },
+        },
+      });
+
+      totalCount = await prisma.restaurant.count({
         where: {
           name: {
             contains: req.params.name,
@@ -24,7 +39,18 @@ export async function getRestaurants(
       });
     } else {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      restaurants = await prisma.restaurant.findMany();
+      restaurants = await prisma.restaurant.findMany({
+        skip: skipCount,
+        take: 10,
+      });
+      totalCount = await prisma.restaurant.count({
+        where: {
+          name: {
+            contains: req.params.name,
+            mode: 'insensitive',
+          },
+        },
+      });
     }
     if (!restaurants.length) {
       return res.status(401).json({ message: 'Unable to find restaurants' });
@@ -33,7 +59,9 @@ export async function getRestaurants(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       'userId',
     ]);
-    return res.status(200).json(restaurantsWithoutUserId);
+    return res
+      .status(200)
+      .json({ restaurants: restaurantsWithoutUserId, totalCount });
   } catch (error) {
     return next(error);
   }

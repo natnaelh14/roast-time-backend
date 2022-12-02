@@ -34,7 +34,7 @@ router.post(
   handleNewRestaurant,
 );
 router.get('/search/restaurant/:id', getRestaurantById);
-router.get('/restaurants/:name*?', getRestaurants);
+router.get('/restaurants/:pageCount*?:name*?', getRestaurants);
 router.put(
   '/restaurant/:accountId/update/:restaurantId',
   protectRoute,
