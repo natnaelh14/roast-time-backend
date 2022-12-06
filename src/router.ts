@@ -14,6 +14,10 @@ import {
   deleteRestaurant,
   getRestaurants,
 } from './controllers/restaurant';
+import {
+  handleNewReservation,
+  getReservations,
+} from './controllers/reservation';
 import { handleInputErrors } from './modules/middleware';
 import {
   validateRegisterInputs,
@@ -45,6 +49,10 @@ router.delete(
   protectRoute,
   deleteRestaurant,
 );
+
+// Reservation
+router.post('/reservation', protectRoute, handleNewReservation);
+router.get('/reservations/:accountId', protectRoute, getReservations);
 
 // User
 router.post(

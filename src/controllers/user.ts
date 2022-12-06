@@ -42,6 +42,7 @@ export async function handleSignIn(
       },
       include: {
         restaurant: true,
+        reservation: true,
       },
     });
     if (!user) {
