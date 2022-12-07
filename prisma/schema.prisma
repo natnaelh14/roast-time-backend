@@ -16,30 +16,45 @@ enum ACCOUNT_TYPE {
 }
 
 model User {
-  id          String       @id @default(uuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime?    @updatedAt
-  email       String       @unique
+  id          String        @id @default(uuid())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime?     @updatedAt
+  email       String        @unique
   password    String
   firstName   String
   lastName    String
-  phoneNumber String       @unique
+  phoneNumber String        @unique
   accountType ACCOUNT_TYPE
   restaurant  Restaurant?
+  reservation Reservation[]
+}
+
+model Reservation {
+  id              String     @id @default(uuid())
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime?  @updatedAt
+  partySize       Int
+  reservationDate DateTime   @db.Date
+  reservationTime String
+  userId          String
+  user            User       @relation(fields: [userId], references: [id])
+  restaurantId    String
+  restaurant      Restaurant @relation(fields: [restaurantId], references: [id])
 }
 
 model Restaurant {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  name      String    @unique @db.VarChar(255)
-  address   String    @db.VarChar(255)
-  latitude  Float
-  longitude Float
-  category  String    @db.VarChar(255)
-  imageData Json
-  userId    String    @unique
-  user      User      @relation(fields: [userId], references: [id])
+  id          String        @id @default(uuid())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime?     @updatedAt
+  name        String        @unique @db.VarChar(255)
+  address     String        @db.VarChar(255)
+  latitude    Float
+  longitude   Float
+  category    String        @db.VarChar(255)
+  imageData   Json
+  userId      String        @unique
+  user        User          @relation(fields: [userId], references: [id])
+  Reservation Reservation[]
 
   @@unique([id, userId])
 }
