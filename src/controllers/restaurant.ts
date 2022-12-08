@@ -56,7 +56,6 @@ export async function getRestaurants(
       return res.status(401).json({ message: 'Unable to find restaurants' });
     }
     const restaurantsWithoutUserId = excludeFromArrayOfObjects(restaurants, [
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       'userId',
     ]);
     return res
@@ -82,7 +81,6 @@ export async function getRestaurantById(
       return res.status(401).json({ message: 'Unable to find restaurant' });
     }
     const restaurantWithoutUserId = excludeFromSingleObject(restaurant, [
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       'userId',
     ]);
     return res.status(200).json(restaurantWithoutUserId);

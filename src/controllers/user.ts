@@ -117,7 +117,6 @@ export async function handleNewRestaurantUser(
 
 export async function getUser(req: Request, res: Response, next: NextFunction) {
   try {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore:next-line
     const { id } = req.user;
     if (id !== req.params.accountId) {
@@ -149,7 +148,6 @@ export async function updateUser(
   next: NextFunction,
 ) {
   try {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore:next-line
     const { id } = req.user;
     if (id !== req.params.accountId) {
