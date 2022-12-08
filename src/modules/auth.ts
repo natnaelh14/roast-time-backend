@@ -44,7 +44,6 @@ export const protectRoute = (
   try {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const user = jwt.verify(token!, process.env.ACCESS_TOKEN_SECRET!);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore:next-line
     req.user = user;
     next();

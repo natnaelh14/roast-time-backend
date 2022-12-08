@@ -17,7 +17,6 @@ export function excludeFromArrayOfObjects(
   const newArr = [];
   // eslint-disable-next-line no-restricted-syntax
   for (const val of arr) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore:next-line
     newArr.push(excludeFromSingleObject(val, keys));
   }
