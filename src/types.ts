@@ -7,5 +7,5 @@ export interface IDecode {
 }
 export interface IGetUserAuthInfoRequest extends Request {
   // eslint-disable-next-line @typescript-eslint/ban-types
-  user?: IDecode | {};
+  user?: IDecode;
 }

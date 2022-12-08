@@ -22,9 +22,10 @@ import {
 } from './controllers/reservation';
 import { handleInputErrors } from './modules/middleware';
 import {
-  validateRegisterInputs,
+  validateRegisterUserInputs,
   validateSignInInputs,
   validateRestaurantInputs,
+  validateCreateReservationInputs,
 } from './modules/validate-inputs';
 import { protectRoute } from './modules/auth';
 import { body } from 'express-validator';
@@ -53,7 +54,13 @@ router.delete(
 );
 
 // Reservation
-router.post('/reservation', protectRoute, handleNewReservation);
+router.post(
+  '/reservation',
+  protectRoute,
+  validateCreateReservationInputs,
+  handleInputErrors,
+  handleNewReservation,
+);
 router.get('/reservations/:accountId', protectRoute, getReservations);
 router.put(
   '/reservation/:accountId/update/:reservationId',
@@ -69,14 +76,14 @@ router.delete(
 // User
 router.post(
   '/restaurant/register',
-  validateRegisterInputs,
+  validateRegisterUserInputs,
   validateRestaurantInputs,
   handleInputErrors,
   handleNewRestaurantUser,
 );
 router.post(
   '/register',
-  validateRegisterInputs,
+  validateRegisterUserInputs,
   handleInputErrors,
   handleNewUser,
 );
