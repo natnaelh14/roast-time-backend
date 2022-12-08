@@ -1,8 +1,9 @@
 import prisma from '../config/db';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
+import { IGetUserAuthInfoRequest } from 'src/types';
 
 export async function handleNewReservation(
-  req: Request,
+  req: IGetUserAuthInfoRequest,
   res: Response,
   next: NextFunction,
 ) {
@@ -14,8 +15,8 @@ export async function handleNewReservation(
       userId,
       restaurantId,
     } = req.body;
-    // @ts-ignore:next-line
-    const { id } = req.user;
+    // retrieve user id from token payload
+    const id = req?.user?.id;
     if (id !== userId) {
       return res
         .status(403)
@@ -42,14 +43,14 @@ export async function handleNewReservation(
 }
 
 export async function getReservations(
-  req: Request,
+  req: IGetUserAuthInfoRequest,
   res: Response,
   next: NextFunction,
 ) {
   try {
+    // retrieve user id from token payload
+    const id = req?.user?.id;
     const { accountId } = req.params;
-    // @ts-ignore:next-line
-    const { id } = req.user;
     if (id !== accountId) {
       return res
         .status(403)
@@ -64,7 +65,7 @@ export async function getReservations(
       },
     });
     if (!reservations) {
-      return res.status(401).json({ message: 'There are no reservations.' });
+      return res.status(404).json({ message: 'There are no reservations.' });
     }
     return res.status(200).json({ reservations });
   } catch (error) {
@@ -73,15 +74,15 @@ export async function getReservations(
 }
 
 export async function updateReservation(
-  req: Request,
+  req: IGetUserAuthInfoRequest,
   res: Response,
   next: NextFunction,
 ) {
   try {
+    // retrieve user id from token payload
+    const id = req?.user?.id;
     const { accountId, reservationId } = req.params;
     const { partySize, reservationDate, reservationTime } = req.body;
-    // @ts-ignore:next-line
-    const { id } = req.user;
     if (id !== accountId) {
       return res
         .status(403)
@@ -90,7 +91,10 @@ export async function updateReservation(
 
     const updatedReservation = await prisma.reservation.update({
       where: {
-        id: reservationId,
+        id_userId: {
+          id: reservationId,
+          userId: accountId,
+        },
       },
       data: {
         partySize,
@@ -98,8 +102,9 @@ export async function updateReservation(
         reservationTime,
       },
     });
+
     if (!updatedReservation) {
-      return res.status(404).json({ message: 'Unable to update reservation' });
+      return res.status(404).json({ message: 'unable to update reservation' });
     }
     return res.json({ restaurant: updatedReservation });
   } catch (error) {
@@ -108,30 +113,34 @@ export async function updateReservation(
 }
 
 export async function deleteReservation(
-  req: Request,
+  req: IGetUserAuthInfoRequest,
   res: Response,
   next: NextFunction,
 ) {
   try {
+    // retrieve user id from token payload
+    const id = req?.user?.id;
     const { accountId, reservationId } = req.params;
-    // @ts-ignore:next-line
-    const { id } = req.user;
     if (id !== accountId) {
       return res
         .status(403)
         .json({ message: "user doesn't have access rights" });
     }
+
     await prisma.reservation
       .delete({
         where: {
-          id: reservationId,
+          id_userId: {
+            id: reservationId,
+            userId: accountId,
+          },
         },
       })
       .catch(() => {
-        return res.status(404).json({ message: 'Unable to update restaurant' });
+        return res.status(404).json({ message: 'unable to update restaurant' });
       });
 
-    return res.json({ message: 'Reservation has successfully been removed.' });
+    return res.json({ message: 'reservation has successfully been removed.' });
   } catch (error) {
     return next(error);
   }

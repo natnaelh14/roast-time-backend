@@ -2,6 +2,7 @@ import prisma from '../config/db';
 import { comparePasswords, createJWT, hashPassword } from '../modules/auth';
 import { NextFunction, Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
+import { IGetUserAuthInfoRequest } from 'src/types';
 
 export async function handleNewUser(
   req: Request,
@@ -9,14 +10,15 @@ export async function handleNewUser(
   next: NextFunction,
 ) {
   try {
+    const { email, firstName, lastName, phoneNumber, accountType } = req.body;
     const user = await prisma.user.create({
       data: {
-        email: req.body.email,
+        email,
         password: await hashPassword(req.body.password),
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        phoneNumber: req.body.phoneNumber,
-        accountType: req.body.accountType.toUpperCase(),
+        firstName,
+        lastName,
+        phoneNumber,
+        accountType: accountType.toUpperCase(),
       },
     });
     if (!user) {
@@ -68,65 +70,88 @@ export async function handleNewRestaurantUser(
   next: NextFunction,
 ) {
   try {
-    const user = await prisma.user.create({
+    const {
+      email,
+      firstName,
+      lastName,
+      phoneNumber,
+      accountType,
+      name,
+      address,
+      latitude,
+      longitude,
+      category,
+      imageData,
+    } = req.body;
+    const newUser = await prisma.user.create({
       data: {
-        email: req.body.email,
+        email,
         password: await hashPassword(req.body.password),
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        phoneNumber: req.body.phoneNumber,
-        accountType: req.body.accountType.toUpperCase(),
+        firstName,
+        lastName,
+        phoneNumber,
+        accountType: accountType.toUpperCase(),
       },
     });
-    if (!user) {
-      return res
-        .status(401)
-        .json({ message: 'Unable to create an account for the restaurant.' });
+    if (!newUser) {
+      return res.status(400).json({
+        message: 'unable to create an account for the restaurant user.',
+      });
     }
-    await prisma.restaurant.create({
+    const newRestaurant = await prisma.restaurant.create({
       data: {
-        name: req.body.name,
-        address: req.body.address,
-        latitude: req.body.latitude,
-        longitude: req.body.longitude,
-        category: req.body.category,
-        imageData: req.body.imageData as Prisma.JsonArray,
-        userId: user.id,
+        name,
+        address,
+        latitude,
+        longitude,
+        category,
+        imageData: imageData as Prisma.JsonArray,
+        userId: newUser.id,
       },
     });
-    const token = createJWT(user);
-    const newUser = await prisma.user.findUnique({
+    if (!newRestaurant) {
+      return res.status(400).json({
+        message: 'unable to create an account for the restaurant user.',
+      });
+    }
+    const token = createJWT(newUser);
+    const user = await prisma.user.findUnique({
       where: {
-        id: user.id,
+        id: newUser.id,
       },
       include: {
         restaurant: true,
       },
     });
-    if (!newUser) {
-      return res
-        .status(401)
-        .json({ message: 'Unable to complete registration' });
+    if (!user) {
+      return res.status(400).json({
+        message: 'unable to create an account for the restaurant user.',
+      });
     }
-    const { password, ...userWithoutPassword } = newUser;
+    const { password, ...userWithoutPassword } = user;
     return res.status(200).json({ token, account: userWithoutPassword });
   } catch (error) {
     return next(error);
   }
 }
 
-export async function getUser(req: Request, res: Response, next: NextFunction) {
+export async function getUser(
+  req: IGetUserAuthInfoRequest,
+  res: Response,
+  next: NextFunction,
+) {
   try {
-    // @ts-ignore:next-line
-    const { id } = req.user;
-    if (id !== req.params.accountId) {
+    const { accountId } = req.params;
+    // retrieve user id from token payload
+    const id = req?.user?.id;
+    if (id !== accountId) {
       return res
         .status(403)
         .json({ message: "user doesn't have access rights" });
     }
     const user = await prisma.user.findUnique({
       where: {
-        id: req.params.accountId,
+        id: accountId,
       },
       include: {
         restaurant: true,
@@ -143,26 +168,28 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function updateUser(
-  req: Request,
+  req: IGetUserAuthInfoRequest,
   res: Response,
   next: NextFunction,
 ) {
   try {
-    // @ts-ignore:next-line
-    const { id } = req.user;
-    if (id !== req.params.accountId) {
+    const { firstName, lastName, phoneNumber } = req.body;
+    const { accountId } = req.params;
+    // retrieve user id from token payload
+    const id = req?.user?.id;
+    if (id !== accountId) {
       return res
         .status(403)
         .json({ message: "user doesn't have access rights" });
     }
     const updatedUser = await prisma.user.update({
       where: {
-        id: req.params.accountId,
+        id: accountId,
       },
       data: {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        phoneNumber: req.body.phoneNumber,
+        firstName,
+        lastName,
+        phoneNumber,
       },
     });
     return res.status(200).json({ restaurant: updatedUser });
