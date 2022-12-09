@@ -59,7 +59,54 @@ export async function getReservations(
     const reservations = await prisma.reservation.findMany({
       where: {
         userId: accountId,
+        reservationDate: {
+          gte: new Date(),
+        },
       },
+      orderBy: [
+        {
+          reservationDate: 'asc',
+        },
+      ],
+      include: {
+        restaurant: true,
+      },
+    });
+    if (!reservations) {
+      return res.status(404).json({ message: 'There are no reservations.' });
+    }
+    return res.status(200).json({ reservations });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function getReservationsHistory(
+  req: IGetUserAuthInfoRequest,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    // retrieve user id from token payload
+    const id = req?.user?.id;
+    const { accountId } = req.params;
+    if (id !== accountId) {
+      return res
+        .status(403)
+        .json({ message: "user doesn't have access rights" });
+    }
+    const reservations = await prisma.reservation.findMany({
+      where: {
+        userId: accountId,
+        reservationDate: {
+          lt: new Date(),
+        },
+      },
+      orderBy: [
+        {
+          reservationDate: 'asc',
+        },
+      ],
       include: {
         restaurant: true,
       },

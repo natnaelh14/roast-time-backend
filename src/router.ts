@@ -19,6 +19,7 @@ import {
   getReservations,
   updateReservation,
   deleteReservation,
+  getReservationsHistory,
 } from './controllers/reservation';
 import { handleInputErrors } from './modules/middleware';
 import {
@@ -62,6 +63,11 @@ router.post(
   handleNewReservation,
 );
 router.get('/reservations/:accountId', protectRoute, getReservations);
+router.get(
+  '/reservations/history/:accountId',
+  protectRoute,
+  getReservationsHistory,
+);
 router.put(
   '/reservation/:accountId/update/:reservationId',
   protectRoute,
