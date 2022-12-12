@@ -14,6 +14,7 @@ import {
   deleteRestaurant,
   getRestaurants,
   handleSaveRestaurant,
+  handleRemoveSavedRestaurant,
 } from './controllers/restaurant';
 import {
   handleNewReservation,
@@ -55,9 +56,14 @@ router.delete(
   deleteRestaurant,
 );
 router.post(
-  '/restaurant/:accountId/save/:restaurantId',
+  '/save/:accountId/restaurant/:restaurantId',
   protectRoute,
   handleSaveRestaurant,
+);
+router.delete(
+  '/delete/:accountId/restaurant/:restaurantId',
+  protectRoute,
+  handleRemoveSavedRestaurant,
 );
 
 // Reservation

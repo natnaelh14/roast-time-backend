@@ -156,6 +156,8 @@ export async function getUser(
       },
       include: {
         restaurant: true,
+        reservation: true,
+        savedRestaurant: true,
       },
     });
     if (!user) {
