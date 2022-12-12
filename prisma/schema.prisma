@@ -16,17 +16,18 @@ enum ACCOUNT_TYPE {
 }
 
 model User {
-  id          String        @id @default(uuid())
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime?     @updatedAt
-  email       String        @unique
-  password    String
-  firstName   String
-  lastName    String
-  phoneNumber String        @unique
-  accountType ACCOUNT_TYPE
-  restaurant  Restaurant?
-  reservation Reservation[]
+  id              String            @id @default(uuid())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime?         @updatedAt
+  email           String            @unique
+  password        String
+  firstName       String
+  lastName        String
+  phoneNumber     String            @unique
+  accountType     ACCOUNT_TYPE
+  restaurant      Restaurant?
+  reservation     Reservation[]
+  savedRestaurant SavedRestaurant[]
 }
 
 model Reservation {
@@ -45,18 +46,29 @@ model Reservation {
 }
 
 model Restaurant {
-  id          String        @id @default(uuid())
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime?     @updatedAt
-  name        String        @unique @db.VarChar(255)
-  address     String        @db.VarChar(255)
-  latitude    Float
-  longitude   Float
-  category    String        @db.VarChar(255)
-  imageData   Json
-  userId      String        @unique
-  user        User          @relation(fields: [userId], references: [id])
-  Reservation Reservation[]
+  id              String            @id @default(uuid())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime?         @updatedAt
+  name            String            @unique @db.VarChar(255)
+  address         String            @db.VarChar(255)
+  latitude        Float
+  longitude       Float
+  category        String            @db.VarChar(255)
+  imageData       Json
+  userId          String            @unique
+  user            User              @relation(fields: [userId], references: [id])
+  Reservation     Reservation[]
+  savedRestaurant SavedRestaurant[]
 
   @@unique([id, userId])
+}
+
+model SavedRestaurant {
+  id           String     @id @default(uuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+
+  @@unique([restaurantId, userId])
 }

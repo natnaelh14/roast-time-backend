@@ -28,6 +28,11 @@ export async function getRestaurants(
             mode: 'insensitive',
           },
         },
+        orderBy: [
+          {
+            name: 'asc',
+          },
+        ],
       });
 
       totalCount = await prisma.restaurant.count({
@@ -43,6 +48,11 @@ export async function getRestaurants(
       restaurants = await prisma.restaurant.findMany({
         skip: skipCount,
         take: 10,
+        orderBy: [
+          {
+            name: 'asc',
+          },
+        ],
       });
       totalCount = await prisma.restaurant.count({
         where: {
@@ -207,6 +217,68 @@ export async function deleteRestaurant(
       });
 
     return res.json({ message: 'Restaurant has been removed.' });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function handleSaveRestaurant(
+  req: IGetUserAuthInfoRequest,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { accountId, restaurantId } = req.params;
+    // retrieve user id from token payload
+    const id = req?.user?.id;
+    if (id !== accountId) {
+      return res
+        .status(403)
+        .json({ message: "user doesn't have access rights" });
+    }
+    const savedRestaurant = await prisma.savedRestaurant.create({
+      data: {
+        userId: accountId,
+        restaurantId,
+      },
+    });
+
+    if (!savedRestaurant) {
+      return res.status(404).json({ message: 'unable to save restaurant' });
+    }
+    return res.status(200).json({ savedRestaurant });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function handleRemoveSavedRestaurant(
+  req: IGetUserAuthInfoRequest,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { accountId, restaurantId } = req.params;
+    // retrieve user id from token payload
+    const id = req?.user?.id;
+    if (id !== accountId) {
+      return res
+        .status(403)
+        .json({ message: "user doesn't have access rights" });
+    }
+    const deletedRestaurant = await prisma.savedRestaurant.delete({
+      where: {
+        restaurantId_userId: {
+          userId: accountId,
+          restaurantId,
+        },
+      },
+    });
+
+    if (!deletedRestaurant) {
+      return res.status(404).json({ deletedRestaurant });
+    }
+    return res.status(200).json({ deletedRestaurant });
   } catch (error) {
     return next(error);
   }

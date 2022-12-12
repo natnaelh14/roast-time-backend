@@ -45,6 +45,7 @@ export async function handleSignIn(
       include: {
         restaurant: true,
         reservation: true,
+        savedRestaurant: true,
       },
     });
     if (!user) {
@@ -155,6 +156,8 @@ export async function getUser(
       },
       include: {
         restaurant: true,
+        reservation: true,
+        savedRestaurant: true,
       },
     });
     if (!user) {
