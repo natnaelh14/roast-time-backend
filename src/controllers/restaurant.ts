@@ -283,3 +283,35 @@ export async function handleRemoveSavedRestaurant(
     return next(error);
   }
 }
+
+export async function getSavedRestaurant(
+  req: IGetUserAuthInfoRequest,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { accountId } = req.params;
+    // retrieve user id from token payload
+    const id = req?.user?.id;
+    if (id !== accountId) {
+      return res
+        .status(403)
+        .json({ message: "user doesn't have access rights" });
+    }
+    const savedRestaurants = await prisma.savedRestaurant.findMany({
+      where: {
+        userId: accountId,
+      },
+      include: {
+        restaurant: true,
+      },
+    });
+
+    if (!savedRestaurants) {
+      return res.status(404).json({ message: 'unable to save restaurant' });
+    }
+    return res.status(200).json({ savedRestaurants });
+  } catch (error) {
+    return next(error);
+  }
+}
