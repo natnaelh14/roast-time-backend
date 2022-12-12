@@ -13,6 +13,7 @@ import {
   updateRestaurant,
   deleteRestaurant,
   getRestaurants,
+  handleSaveRestaurant,
 } from './controllers/restaurant';
 import {
   handleNewReservation,
@@ -52,6 +53,11 @@ router.delete(
   '/restaurant/:accountId/delete/:restaurantId',
   protectRoute,
   deleteRestaurant,
+);
+router.post(
+  '/restaurant/:accountId/save/:restaurantId',
+  protectRoute,
+  handleSaveRestaurant,
 );
 
 // Reservation

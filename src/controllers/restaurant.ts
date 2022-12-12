@@ -211,3 +211,33 @@ export async function deleteRestaurant(
     return next(error);
   }
 }
+
+export async function handleSaveRestaurant(
+  req: IGetUserAuthInfoRequest,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { accountId, restaurantId } = req.params;
+    // retrieve user id from token payload
+    const id = req?.user?.id;
+    if (id !== accountId) {
+      return res
+        .status(403)
+        .json({ message: "user doesn't have access rights" });
+    }
+    const savedRestaurant = await prisma.savedRestaurant.create({
+      data: {
+        userId: accountId,
+        restaurantId,
+      },
+    });
+
+    if (!savedRestaurant) {
+      return res.status(404).json({ message: 'unable to save restaurant' });
+    }
+    return res.status(200).json({ savedRestaurant });
+  } catch (error) {
+    return next(error);
+  }
+}
