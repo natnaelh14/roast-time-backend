@@ -18,7 +18,7 @@ export const createJWT = (user: UserProps) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     process.env.ACCESS_TOKEN_SECRET!,
     {
-      expiresIn: '30m',
+      expiresIn: '60m',
     },
   );
 };

@@ -10,7 +10,16 @@ export async function handleNewUser(
   next: NextFunction,
 ) {
   try {
-    const { email, firstName, lastName, phoneNumber, accountType } = req.body;
+    const {
+      email,
+      firstName,
+      lastName,
+      phoneNumber,
+      accountType,
+      address,
+      latitude,
+      longitude,
+    } = req.body;
     const user = await prisma.user.create({
       data: {
         email,
@@ -18,6 +27,9 @@ export async function handleNewUser(
         firstName,
         lastName,
         phoneNumber,
+        address,
+        latitude,
+        longitude,
         accountType: accountType.toUpperCase(),
       },
     });
