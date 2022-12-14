@@ -24,6 +24,9 @@ model User {
   firstName       String
   lastName        String
   phoneNumber     String            @unique
+  address         String?           @db.VarChar(255)
+  latitude        Float?
+  longitude       Float?
   accountType     ACCOUNT_TYPE
   restaurant      Restaurant?
   reservation     Reservation[]
