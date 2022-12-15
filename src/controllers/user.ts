@@ -55,8 +55,6 @@ export async function handleSignIn(
         email: req.body.email,
       },
       include: {
-        restaurant: true,
-        reservation: true,
         savedRestaurant: true,
       },
     });
@@ -167,8 +165,6 @@ export async function getUser(
         id: accountId,
       },
       include: {
-        restaurant: true,
-        reservation: true,
         savedRestaurant: true,
       },
     });
