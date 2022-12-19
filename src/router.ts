@@ -23,6 +23,9 @@ import {
   updateReservation,
   deleteReservation,
   getReservationsHistory,
+  getReservationForRestaurant,
+  deleteReservationForRestaurant,
+  updateReservationForRestaurant,
 } from './controllers/reservation';
 import { handleInputErrors } from './modules/middleware';
 import {
@@ -91,6 +94,21 @@ router.delete(
   '/reservation/:accountId/delete/:reservationId',
   protectRoute,
   deleteReservation,
+);
+router.get(
+  '/reservations/:accountId/restaurant/:restaurantId',
+  protectRoute,
+  getReservationForRestaurant,
+);
+router.put(
+  '/reservation/:reservationId/restaurant/:restaurantId',
+  protectRoute,
+  updateReservationForRestaurant,
+);
+router.delete(
+  '/reservation/:reservationId/restaurant/:restaurantId',
+  protectRoute,
+  deleteReservationForRestaurant,
 );
 
 // User
