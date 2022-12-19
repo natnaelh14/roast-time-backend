@@ -26,8 +26,8 @@ model User {
   phoneNumber     String            @unique
   imageUrl        String?           @default("https://res.cloudinary.com/doalzf6o2/image/upload/v1669413457/cn5520zlzdmtk8wgf43k.jpg")
   address         String?           @db.VarChar(255)
-  latitude        Float?            
-  longitude       Float?            
+  latitude        Float?
+  longitude       Float?
   accountType     ACCOUNT_TYPE
   restaurant      Restaurant?
   reservation     Reservation[]
@@ -47,6 +47,7 @@ model Reservation {
   restaurant      Restaurant @relation(fields: [restaurantId], references: [id])
 
   @@unique([id, userId])
+  @@unique([id, restaurantId])
 }
 
 model Restaurant {
