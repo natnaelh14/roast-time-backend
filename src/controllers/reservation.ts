@@ -199,7 +199,7 @@ export async function getReservationForRestaurant(
   next: NextFunction,
 ) {
   try {
-    const { accountId, restaurantId } = req.params;
+    const { accountId, restaurantId, reservationDate } = req.params;
     // retrieve user id from token payload
     const id = req?.user?.id;
     if (id !== accountId) {
@@ -216,6 +216,9 @@ export async function getReservationForRestaurant(
     const restaurantReservations = await prisma.reservation.findMany({
       where: {
         restaurantId,
+        ...(reservationDate?.length
+          ? { reservationDate: new Date(reservationDate) }
+          : {}),
       },
       include: {
         user: true,
