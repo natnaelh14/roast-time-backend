@@ -96,7 +96,7 @@ router.delete(
   deleteReservation,
 );
 router.get(
-  '/reservations/:accountId/restaurant/:restaurantId',
+  '/reservations/:accountId/restaurant/:restaurantId/:reservationDate*?',
   protectRoute,
   getReservationForRestaurant,
 );
