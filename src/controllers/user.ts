@@ -217,9 +217,10 @@ export async function validateEmail(
   next: NextFunction,
 ) {
   try {
+    const { email } = req.params;
     const user = await prisma.user.findUnique({
       where: {
-        email: req.body.email,
+        email,
       },
     });
     return res.status(200).json({ isValid: !user });
@@ -234,9 +235,10 @@ export async function validatePhoneNumber(
   next: NextFunction,
 ) {
   try {
+    const { phoneNumber } = req.params;
     const user = await prisma.user.findUnique({
       where: {
-        phoneNumber: req.body.phoneNumber,
+        phoneNumber,
       },
     });
     return res.status(200).json({ isValid: !user });

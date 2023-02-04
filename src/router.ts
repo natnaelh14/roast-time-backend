@@ -35,7 +35,7 @@ import {
   validateCreateReservationInputs,
 } from './modules/validate-inputs';
 import { protectRoute } from './modules/auth';
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import { Router } from 'express';
 
 const router = Router();
@@ -129,14 +129,14 @@ router.post('/login', validateSignInInputs, handleInputErrors, handleSignIn);
 router.get('/account/:accountId', protectRoute, getUser);
 router.put('/account/:accountId/update', protectRoute, updateUser);
 router.get(
-  '/validate/email',
-  body('email').isEmail(),
+  '/validate/email/:email',
+  param('email').isEmail(),
   handleInputErrors,
   validateEmail,
 );
 router.get(
-  '/validate/phonenumber',
-  body('phoneNumber').not().isEmpty().trim().escape(),
+  '/validate/phonenumber/:phoneNumber',
+  param('phoneNumber').not().isEmpty().trim().escape(),
   handleInputErrors,
   validatePhoneNumber,
 );
