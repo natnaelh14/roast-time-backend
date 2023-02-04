@@ -5,8 +5,8 @@ describe('Validate user', () => {
   // eslint-disable-next-line jest/expect-expect
   test('validate email and return a boolean', async () => {
     const response = await request(app)
-      .get('/v1/validate/email')
-      .send({ email: 'test@test.com' })
+      .get('/v1/validate/email/test@test.com')
+      .send()
       .set('Accept', 'application/json')
       .expect(200);
     expect(response.body.isValid).toBe(true);
@@ -14,8 +14,8 @@ describe('Validate user', () => {
   // eslint-disable-next-line jest/expect-expect
   test('validate phoneNumber and return a boolean', async () => {
     const response = await request(app)
-      .get('/v1/validate/phonenumber')
-      .send({ phoneNumber: '0000000000' })
+      .get('/v1/validate/phonenumber/0000000000')
+      .send()
       .set('Accept', 'application/json')
       .expect(200);
     expect(response.body.isValid).toBe(true);
