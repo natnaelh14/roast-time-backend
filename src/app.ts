@@ -1,11 +1,11 @@
-import router from './router';
-import { corsOptions } from './config/corsOptions';
-import { errorHandler } from './middleware/errorHandler';
-import express from 'express';
-import morgan from 'morgan';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import helmet from 'helmet';
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import { errorHandler } from "./middleware/errorHandler";
+import { corsOptions } from "./config/corsOptions";
+import router from "./router";
 
 const app = express();
 
@@ -13,7 +13,7 @@ const app = express();
 app.use(helmet());
 
 // Morgan is a middleware that logs requests
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 
 // Cross Origin Resource Sharing
 app.use(cors(corsOptions));
@@ -27,7 +27,7 @@ app.use(cookieParser());
 // Built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/v1', router);
+app.use("/v1", router);
 
 app.use(errorHandler);
 

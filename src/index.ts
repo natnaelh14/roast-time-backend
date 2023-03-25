@@ -1,5 +1,5 @@
-import app from './app';
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
+import app from "./app";
 // import fs from 'fs';
 // import https from 'https';
 
@@ -18,7 +18,5 @@ dotenv.config();
 //   .listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 // server.setTimeout(120000);
 
-const server = app.listen(PORT, () =>
-  console.log(`🚀 Server running on port ${PORT}`),
-);
+const server = app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 server.setTimeout(120000);
