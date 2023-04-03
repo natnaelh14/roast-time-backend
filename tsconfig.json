@@ -5,12 +5,11 @@
 		"declarationMap": true /* Generates a sourcemap for each corresponding '.d.ts' file. */,
 		"target": "ES2021" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
 		"lib": [
-			"esnext",
-			"dom"
+			"es2020"
 		] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
 		"experimentalDecorators": true /* Enable experimental support for TC39 stage 2 draft decorators. */,
 		"emitDecoratorMetadata": true /* Emit design-type metadata for decorated declarations in source files. */,
-		"module": "ESNext" /* Specify what module code is generated. */,
+		"module": "NodeNext" /* Specify what module code is generated. */,
 		"outDir": "dist" /* Specify an output folder for all emitted files. */,
 		// "rootDir": "./src", /* Specify the root folder within your source files. */
 		"moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
@@ -24,12 +23,16 @@
 		"esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
 		"forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
 		/* Type Checking */
-		"strict": true /* Enable all strict type-checking options. */,
+		"strict": false /* Enable all strict type-checking options. */,
 		"noUncheckedIndexedAccess": true,
 		"noImplicitAny": true /* Enable error reporting for expressions and declarations with an 
     "alwaysStrict": true, /* Ensure 'use strict' is always emitted. */,
 		"skipLibCheck": true /* Skip type checking all .d.ts files. */
 	},
-	"include": ["**/*.ts"],
+	"ts-node": {
+		"esm": true
+		// "experimentalSpecifierResolution": "node"
+	},
+	"include": ["**/*.ts", "env.d.ts"],
 	"exclude": ["node_modules", "dist", "coverage"]
 }

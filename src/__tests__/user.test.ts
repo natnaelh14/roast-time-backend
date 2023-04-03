@@ -15,7 +15,7 @@ describe("Validate user", () => {
 	// eslint-disable-next-line jest/expect-expect
 	test("validate phoneNumber and return a boolean", async () => {
 		const response = await request(app)
-			.get("/v1/validate/phonenumber/0000000000")
+			.get("/v1/validate/phoneNumber/0000000000")
 			.send()
 			.set("Accept", "application/json")
 			.expect(200);
