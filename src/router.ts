@@ -79,7 +79,7 @@ router.get("/account/:accountId", protectRoute, getUser);
 router.put("/account/:accountId/update", protectRoute, updateUser);
 router.get("/validate/email/:email", param("email").isEmail(), handleInputErrors, validateEmail);
 router.get(
-	"/validate/phonenumber/:phoneNumber",
+	"/validate/phoneNumber/:phoneNumber",
 	param("phoneNumber").not().isEmpty().trim().escape(),
 	handleInputErrors,
 	validatePhoneNumber,
