@@ -210,7 +210,7 @@ export async function updateUser(req: IGetUserAuthInfoRequest, res: Response, ne
 				phoneNumber,
 			},
 		});
-		return res.status(200).json({ restaurant: updatedUser });
+		return res.status(200).json({ account: updatedUser });
 	} catch (e) {
 		if (e instanceof Error) {
 			next(e);
