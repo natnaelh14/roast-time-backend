@@ -29,7 +29,7 @@ model User {
   latitude        Float?
   longitude       Float?
   accountType     ACCOUNT_TYPE
-  restaurant      Restaurant?
+  restaurant      Restaurant[]
   reservation     Reservation[]
   savedRestaurant SavedRestaurant[]
 }
@@ -60,7 +60,7 @@ model Restaurant {
   longitude       Float
   category        String            @db.VarChar(255)
   imageData       Json
-  userId          String            @unique
+  userId          String           
   user            User              @relation(fields: [userId], references: [id])
   Reservation     Reservation[]
   savedRestaurant SavedRestaurant[]
