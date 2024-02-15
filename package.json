@@ -2,7 +2,8 @@
 	"name": "roast-time-backend",
 	"version": "1.0.0",
 	"description": "Node.js backend for roasttime app",
-	"main": "src/index",
+	"main": "src/index.ts",	
+	"type":"commonjs",	
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
 		"start": "node dist/index.js",
