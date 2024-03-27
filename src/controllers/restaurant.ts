@@ -1,8 +1,8 @@
 import { Prisma } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
-import { IGetUserAuthInfoRequest } from "src/types";
-import prisma from "../config/db";
-import { excludeFromArrayOfObjects, excludeFromSingleObject } from "../modules/prisma-utils";
+import { IGetUserAuthInfoRequest } from "~/types";
+import prisma from "~/config/db";
+import { excludeFromArrayOfObjects, excludeFromSingleObject } from "~/modules/prisma-utils";
 
 interface IRestaurant {
 	name: string;

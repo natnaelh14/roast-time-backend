@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Response, NextFunction } from "express";
-import { IGetUserAuthInfoRequest, IDecode } from "src/types";
+import { IGetUserAuthInfoRequest, IDecode } from "~/types";
 import bcrypt from "bcrypt";
 
 interface UserProps {
@@ -39,7 +39,7 @@ export const protectRoute = (req: IGetUserAuthInfoRequest, res: Response, next: 
 
 	try {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		const user = jwt.verify(token!, process.env.ACCESS_TOKEN_SECRET) as IDecode;
+		const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET) as IDecode;
 		req.user = user;
 		next();
 	} catch (e) {

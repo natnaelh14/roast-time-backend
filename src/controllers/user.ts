@@ -1,8 +1,8 @@
 import { Prisma, ACCOUNT_TYPE } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
-import { IGetUserAuthInfoRequest } from "src/types";
-import prisma from "../config/db";
-import { comparePasswords, createJWT, hashPassword } from "../modules/auth";
+import { IGetUserAuthInfoRequest } from "~/types";
+import prisma from "~/config/db";
+import { comparePasswords, createJWT, hashPassword } from "~/modules/auth";
 
 interface IUser {
 	email: string;

@@ -3,9 +3,9 @@ import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
-import { errorHandler } from "./middleware/errorHandler";
-import { corsOptions } from "./config/corsOptions";
-import router from "./router";
+import { errorHandler } from "~/middleware/errorHandler";
+import { corsOptions } from "~/config/corsOptions";
+import router from "~/router";
 
 const app = express();
 

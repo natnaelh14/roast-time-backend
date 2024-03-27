@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
-import { IGetUserAuthInfoRequest } from "src/types";
-import prisma from "../config/db";
+import { IGetUserAuthInfoRequest } from "~/types";
+import prisma from "~/config/db";
 
 interface IUpdateReservation {
 	partySize: number;
