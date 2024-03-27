@@ -9,7 +9,7 @@ import {
 	handleNewRestaurantUser,
 	updateUser,
 	getUser,
-} from "./controllers/user";
+} from "~/controllers/user";
 import {
 	getRestaurantById,
 	handleNewRestaurant,
@@ -19,7 +19,7 @@ import {
 	handleSaveRestaurant,
 	handleRemoveSavedRestaurant,
 	getSavedRestaurant,
-} from "./controllers/restaurant";
+} from "~/controllers/restaurant";
 import {
 	handleNewReservation,
 	getReservations,
@@ -29,15 +29,15 @@ import {
 	getReservationForRestaurant,
 	deleteReservationForRestaurant,
 	updateReservationForRestaurant,
-} from "./controllers/reservation";
-import { handleInputErrors } from "./modules/middleware";
+} from "~/controllers/reservation";
+import { handleInputErrors } from "~/modules/middleware";
 import {
 	validateRegisterUserInputs,
 	validateSignInInputs,
 	validateRestaurantInputs,
 	validateCreateReservationInputs,
-} from "./modules/validate-inputs";
-import { protectRoute } from "./modules/auth";
+} from "~/modules/validate-inputs";
+import { protectRoute } from "~/modules/auth";
 
 const router = Router();
 
