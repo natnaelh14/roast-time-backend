@@ -2,9 +2,10 @@
 	"name": "roast-time-backend",
 	"version": "1.0.0",
 	"description": "Node.js backend for roasttime app",
+	"type": "module",
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
-		"start": "node --experimental-specifier-resolution=node dist/index.js",
+		"start": "node dist/src/index.js",
 		"start:cluster": "npx pm2 start dist/index.js -i max",
 		"server": "tsx watch src/index.ts",
 		"cluster": "npx pm2 start src/index.ts -i max",
