@@ -17,14 +17,14 @@ interface IRestaurant {
 export async function getRestaurants(req: Request, res: Response, next: NextFunction) {
 	try {
 		const { pageCount, name } = req.params;
-		const skipCount = ((pageCount ? +pageCount : 1) - 1) * 10;
+		const skipCount = ((pageCount ? +pageCount : 1) - 1) * 8;
 		let restaurants;
 		let totalCount;
 
 		if (name) {
 			restaurants = await prisma.restaurant.findMany({
 				skip: skipCount,
-				take: 10,
+				take: 8,
 				where: {
 					name: {
 						contains: name,
@@ -50,7 +50,7 @@ export async function getRestaurants(req: Request, res: Response, next: NextFunc
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			restaurants = await prisma.restaurant.findMany({
 				skip: skipCount,
-				take: 10,
+				take: 8,
 				orderBy: [
 					{
 						name: "asc",
