@@ -7,7 +7,7 @@
 		"start": "node dist/src/index.js",
 		"start:cluster": "npx pm2 start dist/index.js -i max",
 		"server": "tsx watch src/index.ts",
-		"seed": "ts-node prisma/seed.ts",
+		"seed": "tsx prisma/seed.ts",
 		"cluster": "npx pm2 start src/index.ts -i max",
 		"test": "jest",
 		"test:watch": "jest --watch",
